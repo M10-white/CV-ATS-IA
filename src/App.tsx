@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { HomeScreen } from "./components/HomeScreen";
 import { KeyboardShortcuts } from "./components/KeyboardShortcuts";
 import { MotivationalBackground } from "./components/MotivationalBackground";
+import { UpdateChecker } from "./components/UpdateChecker";
 import { ThemeToggle } from "./components/ui";
 import { SectionEditor } from "./features/editor/SectionEditor";
 import { SectionNav } from "./features/editor/SectionNav";
@@ -18,6 +19,7 @@ export function App() {
     return (
       <div className="relative">
         <MotivationalBackground />
+        <UpdateChecker />
         <div className="absolute top-4 right-4 z-10">
           <ThemeToggle />
         </div>
