@@ -1,147 +1,68 @@
+import { useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { Button } from "../../components/ui";
 import { useCVStore } from "../../stores/cvStore";
-import type { EducationItem, ExperienceItem, LanguageItem, SkillCategory } from "../../types/cv";
+import type { CVData } from "../../types/cv";
+import { ClassicTemplate } from "./templates/ClassicTemplate";
+import { MinimalTemplate } from "./templates/MinimalTemplate";
+import { ModernTemplate } from "./templates/ModernTemplate";
+
+const TEMPLATE_MAP: Record<string, React.ComponentType<{ cv: CVData }>> = {
+  classic: ClassicTemplate,
+  modern: ModernTemplate,
+  minimal: MinimalTemplate,
+};
 
 export function CVPreview() {
+  const { t } = useTranslation();
   const cv = useCVStore((s) => s.getCurrentCV());
+  const previewRef = useRef<HTMLDivElement>(null);
+
   if (!cv) return null;
 
-  const p = cv.profile;
-  const hasName = p.firstName || p.lastName;
-  const accentColor = cv.customization.colors.accent;
+  const Template = TEMPLATE_MAP[cv.meta.template] ?? ClassicTemplate;
+
+  const handleExport = () => {
+    if (!previewRef.current) return;
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+
+    const content = previewRef.current.innerHTML;
+    const font = cv.customization.font;
+
+    printWindow.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<title>${cv.profile.firstName} ${cv.profile.lastName} - CV</title>
+<style>
+  @page { margin: 0; size: A4; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: '${font}', system-ui, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+</style>
+</head>
+<body>${content}</body>
+</html>`);
+    printWindow.document.close();
+    setTimeout(() => {
+      printWindow.print();
+      printWindow.close();
+    }, 250);
+  };
 
   return (
-    <div
-      className="w-[595px] min-h-[842px] bg-white text-[#1a1d23] shadow-sm mx-auto p-10 text-[10pt] leading-[1.5]"
-      style={{ fontFamily: `${cv.customization.font}, system-ui, sans-serif` }}
-    >
-      {/* Header */}
-      <div className="text-center mb-6">
-        {hasName && (
-          <h1 className="text-xl font-bold tracking-tight" style={{ color: accentColor }}>
-            {p.firstName} {p.lastName}
-          </h1>
-        )}
-        {p.jobTitle && <p className="text-sm text-[#4a4f5c] mt-1">{p.jobTitle}</p>}
-        <div className="flex items-center justify-center gap-3 mt-2 text-xs text-[#7c8294] flex-wrap">
-          {p.email && <span>{p.email}</span>}
-          {p.phone && <span>{p.phone}</span>}
-          {p.location && <span>{p.location}</span>}
-          {p.linkedin && <span>{p.linkedin}</span>}
-          {p.website && <span>{p.website}</span>}
-        </div>
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex items-center gap-3">
+        <Button size="sm" onClick={handleExport}>
+          {t("nav.export")}
+        </Button>
       </div>
-
-      {p.summary && (
-        <div className="mb-5">
-          <SectionTitle title="Profil" color={accentColor} />
-          <p className="text-[10pt] whitespace-pre-line">{p.summary}</p>
-        </div>
-      )}
-
-      {cv.sections
-        .filter((s) => s.visible)
-        .map((section) => {
-          if (section.type === "experience" && section.items.length > 0) {
-            return (
-              <div key={section.id} className="mb-5">
-                <SectionTitle title="Expérience professionnelle" color={accentColor} />
-                {(section.items as ExperienceItem[]).map((item) => (
-                  <div key={item.id} className="mb-3">
-                    <div className="flex justify-between items-baseline">
-                      <div>
-                        <span className="font-semibold">{item.position || "Poste"}</span>
-                        {item.company && <span className="text-[#4a4f5c]"> — {item.company}</span>}
-                      </div>
-                      <span className="text-xs text-[#7c8294]">
-                        {item.startDate}
-                        {(item.endDate || item.current) &&
-                          ` – ${item.current ? "Présent" : item.endDate}`}
-                      </span>
-                    </div>
-                    {item.description && (
-                      <p className="mt-1 text-[9.5pt] whitespace-pre-line">{item.description}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            );
-          }
-
-          if (section.type === "education" && section.items.length > 0) {
-            return (
-              <div key={section.id} className="mb-5">
-                <SectionTitle title="Formation" color={accentColor} />
-                {(section.items as EducationItem[]).map((item) => (
-                  <div key={item.id} className="mb-3">
-                    <div className="flex justify-between items-baseline">
-                      <div>
-                        <span className="font-semibold">{item.degree || "Diplôme"}</span>
-                        {item.field && <span> en {item.field}</span>}
-                        {item.institution && (
-                          <span className="text-[#4a4f5c]"> — {item.institution}</span>
-                        )}
-                      </div>
-                      <span className="text-xs text-[#7c8294]">
-                        {item.startDate}
-                        {item.endDate && ` – ${item.endDate}`}
-                      </span>
-                    </div>
-                    {item.description && (
-                      <p className="mt-1 text-[9.5pt] whitespace-pre-line">{item.description}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            );
-          }
-
-          if (section.type === "skills" && section.items.length > 0) {
-            return (
-              <div key={section.id} className="mb-5">
-                <SectionTitle title="Compétences" color={accentColor} />
-                {(section.items as SkillCategory[]).map((cat) => (
-                  <div key={cat.id} className="mb-1.5">
-                    {cat.category && (
-                      <span className="font-semibold text-[9.5pt]">{cat.category} : </span>
-                    )}
-                    <span className="text-[9.5pt]">{cat.items.join(", ")}</span>
-                  </div>
-                ))}
-              </div>
-            );
-          }
-
-          if (section.type === "languages" && section.items.length > 0) {
-            return (
-              <div key={section.id} className="mb-5">
-                <SectionTitle title="Langues" color={accentColor} />
-                <div className="flex flex-wrap gap-x-6 gap-y-1">
-                  {(section.items as LanguageItem[]).map((item) => (
-                    <span key={item.id} className="text-[9.5pt]">
-                      <span className="font-semibold">{item.language}</span>
-                      {item.level && <span className="text-[#7c8294]"> — {item.level}</span>}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            );
-          }
-
-          return null;
-        })}
-    </div>
-  );
-}
-
-function SectionTitle({ title, color }: { title: string; color: string }) {
-  return (
-    <div className="mb-2">
-      <h2
-        className="text-xs font-bold uppercase tracking-wider pb-1"
-        style={{ color, borderBottom: `1.5px solid ${color}` }}
+      <div
+        ref={previewRef}
+        className="shadow-md"
+        style={{ transform: "scale(0.75)", transformOrigin: "top center" }}
       >
-        {title}
-      </h2>
+        <Template cv={cv} />
+      </div>
     </div>
   );
 }

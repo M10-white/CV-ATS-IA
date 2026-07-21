@@ -152,6 +152,42 @@ export function SectionNav() {
           ))}
         </SortableContext>
       </DndContext>
+
+      <div className="mt-auto pt-3 border-t border-border-light flex flex-col gap-1">
+        <button
+          type="button"
+          onClick={() => setActiveSection("customization")}
+          className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm w-full transition-colors ${
+            activeSectionId === "customization"
+              ? "bg-accent-dim text-accent-text font-medium"
+              : "text-ink-secondary hover:bg-border-light"
+          }`}
+        >
+          Personnalisation
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveSection("ats")}
+          className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm w-full transition-colors ${
+            activeSectionId === "ats"
+              ? "bg-accent-dim text-accent-text font-medium"
+              : "text-ink-secondary hover:bg-border-light"
+          }`}
+        >
+          Analyse ATS
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveSection("job-match")}
+          className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm w-full transition-colors ${
+            activeSectionId === "job-match"
+              ? "bg-accent-dim text-accent-text font-medium"
+              : "text-ink-secondary hover:bg-border-light"
+          }`}
+        >
+          Offre d'emploi
+        </button>
+      </div>
     </div>
   );
 }
