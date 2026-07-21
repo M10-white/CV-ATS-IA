@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skibidi Melyha 67 — Crée ton CV parfait</title>
+<meta name="description" content="Application gratuite pour créer des CV professionnels optimisés ATS. Télécharge maintenant.">
+<style>
+@font-face {
+  font-family: 'Display';
+  src: local('Segoe UI'), local('SF Pro Display'), local('Helvetica Neue'), local('Arial');
+  font-weight: 100 900;
+}
+
+:root {
+  --bg: #fdfcfb;
+  --bg-sub: #f6f3f0;
+  --ink: #1a1715;
+  --ink-soft: #6b5e54;
+  --ink-muted: #a89889;
+  --accent: #be5985;
+  --accent-soft: #d98aac;
+  --accent-dim: #fdf2f7;
+  --accent-glow: rgba(190, 89, 133, 0.12);
+  --border: #e8e2dc;
+  --card-bg: #ffffff;
+  --radius: 20px;
+  --mauve: #9b6b9e;
+  --lavender: #c4a5d0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0d0c;
+    --bg-sub: #1a1816;
+    --ink: #ede8e3;
+    --ink-soft: #a89889;
+    --ink-muted: #6b5e54;
+    --accent: #e879a8;
+    --accent-soft: #c25d8a;
+    --accent-dim: #2d1520;
+    --accent-glow: rgba(232, 121, 168, 0.1);
+    --border: #2a2622;
+    --card-bg: #161413;
+    --mauve: #c4a5d0;
+    --lavender: #9b6b9e;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0e0d0c;
+  --bg-sub: #1a1816;
+  --ink: #ede8e3;
+  --ink-soft: #a89889;
+  --ink-muted: #6b5e54;
+  --accent: #e879a8;
+  --accent-soft: #c25d8a;
+  --accent-dim: #2d1520;
+  --accent-glow: rgba(232, 121, 168, 0.1);
+  --border: #2a2622;
+  --card-bg: #161413;
+  --mauve: #c4a5d0;
+  --lavender: #9b6b9e;
+}
+
+:root[data-theme="light"] {
+  --bg: #fdfcfb;
+  --bg-sub: #f6f3f0;
+  --ink: #1a1715;
+  --ink-soft: #6b5e54;
+  --ink-muted: #a89889;
+  --accent: #be5985;
+  --accent-soft: #d98aac;
+  --accent-dim: #fdf2f7;
+  --accent-glow: rgba(190, 89, 133, 0.12);
+  --border: #e8e2dc;
+  --card-bg: #ffffff;
+  --mauve: #9b6b9e;
+  --lavender: #c4a5d0;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-family: 'Display', system-ui, -apple-system, sans-serif;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: white;
+}
+
+/* ---- Ambient decoration ---- */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+.orb-1 { width: 500px; height: 500px; background: var(--accent); top: -120px; right: -100px; }
+.orb-2 { width: 400px; height: 400px; background: var(--mauve); bottom: 10%; left: -80px; }
+.orb-3 { width: 300px; height: 300px; background: var(--lavender); top: 60%; right: -60px; opacity: 0.2; }
+
+/* ---- Layout ---- */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- Nav ---- */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+.nav-brand {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.nav-brand span { color: var(--accent); }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+
+/* ---- Hero ---- */
+.hero {
+  text-align: center;
+  padding: 100px 0 80px;
+}
+.hero-logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent-dim);
+  box-shadow: 0 0 0 8px var(--accent-glow), 0 20px 60px var(--accent-glow);
+  margin-bottom: 32px;
+}
+.hero h1 {
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  margin-bottom: 8px;
+  text-wrap: balance;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--accent), var(--mauve));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero .tagline {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.hero p {
+  font-size: 18px;
+  color: var(--ink-soft);
+  max-width: 520px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+
+/* ---- CTA ---- */
+.cta-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  color: white;
+  box-shadow: 0 4px 20px var(--accent-glow), 0 1px 3px rgba(0,0,0,0.1);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--accent-glow), 0 2px 6px rgba(0,0,0,0.1);
+}
+.btn-secondary {
+  background: var(--card-bg);
+  color: var(--ink);
+  border: 1.5px solid var(--border);
+}
+.btn-secondary:hover {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+.btn svg { width: 18px; height: 18px; }
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  margin-top: 16px;
+}
+
+/* ---- App preview ---- */
+.preview-section {
+  padding: 40px 0 80px;
+}
+.app-preview {
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  overflow: hidden;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.08);
+}
+.preview-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-sub);
+}
+.preview-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.preview-dot:nth-child(1) { background: #f87171; }
+.preview-dot:nth-child(2) { background: #fbbf24; }
+.preview-dot:nth-child(3) { background: #34d399; }
+.preview-body {
+  display: grid;
+  grid-template-columns: 160px 1fr 240px;
+  min-height: 340px;
+}
+.preview-nav {
+  border-right: 1px solid var(--border);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.preview-nav-item {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+.preview-nav-item.active {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 600;
+}
+.preview-main {
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.preview-cv {
+  width: 200px;
+  background: white;
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border: 1px solid #eee;
+}
+.preview-cv .cv-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+.preview-cv .cv-title {
+  font-size: 9px;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.cv-line {
+  height: 4px;
+  border-radius: 2px;
+  background: #eee;
+  margin-bottom: 4px;
+}
+.cv-line.accent { background: var(--accent); opacity: 0.3; width: 50%; margin-top: 8px; margin-bottom: 6px; }
+.cv-line.w90 { width: 90%; }
+.cv-line.w75 { width: 75%; }
+.cv-line.w60 { width: 60%; }
+.cv-line.w80 { width: 80%; }
+.preview-editor {
+  border-left: 1px solid var(--border);
+  padding: 16px;
+}
+.preview-field {
+  margin-bottom: 10px;
+}
+.preview-field label {
+  display: block;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-muted);
+  margin-bottom: 3px;
+}
+.preview-field .input-fake {
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  padding: 0 8px;
+  font-size: 11px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .preview-body { grid-template-columns: 1fr; }
+  .preview-nav, .preview-editor { display: none; }
+}
+
+/* ---- Features ---- */
+.features {
+  padding: 80px 0;
+}
+.features-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 48px;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 768px) {
+  .features-grid { grid-template-columns: 1fr; }
+}
+.feature-card {
+  padding: 28px 24px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.feature-card:hover {
+  border-color: var(--accent-soft);
+  box-shadow: 0 8px 30px var(--accent-glow);
+}
+.feature-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--accent-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+.feature-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+.feature-card p {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+/* ---- Bottom CTA ---- */
+.bottom-cta {
+  text-align: center;
+  padding: 60px 0 100px;
+}
+.bottom-cta h2 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+.bottom-cta p {
+  color: var(--ink-soft);
+  font-size: 16px;
+  margin-bottom: 32px;
+}
+
+/* ---- Footer ---- */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 24px 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+footer a { color: var(--accent); text-decoration: none; }
+
+/* ---- Animations ---- */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero, .features, .bottom-cta {
+  animation: fade-up 0.6s ease-out both;
+}
+.features { animation-delay: 0.15s; }
+.bottom-cta { animation-delay: 0.25s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero, .features, .bottom-cta { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="container">
+  <nav>
+    <div class="nav-brand">Skibidi <span>Melyha</span> 67</div>
+    <div class="nav-links">
+      <a href="#features">Fonctionnalités</a>
+      <a href="https://github.com/M10-white/CV-ATS-IA" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/M10-white/CV-ATS-IA/releases/latest" class="btn btn-primary" style="padding: 8px 20px; font-size: 13px; border-radius: 10px;">Télécharger</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <img src="logo.png" alt="" class="hero-logo">
+    <div class="tagline">#RechercheD'Emploi</div>
+    <h1>Crée ton <span class="highlight">CV parfait</span> en quelques clics</h1>
+    <p>Une application gratuite et privée pour construire des CV professionnels qui passent les filtres ATS. Tout reste sur ta machine.</p>
+    <div class="cta-group">
+      <a href="https://github.com/M10-white/CV-ATS-IA/releases/latest" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Télécharger pour Windows
+      </a>
+      <a href="https://github.com/M10-white/CV-ATS-IA" target="_blank" rel="noopener" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        Voir le code source
+      </a>
+    </div>
+    <p class="badge">Windows 10/11 · Gratuit · Données 100% locales</p>
+  </section>
+
+  <section class="preview-section">
+    <div class="app-preview">
+      <div class="preview-bar">
+        <span class="preview-dot"></span>
+        <span class="preview-dot"></span>
+        <span class="preview-dot"></span>
+      </div>
+      <div class="preview-body">
+        <div class="preview-nav">
+          <div class="preview-nav-item active">Identité</div>
+          <div class="preview-nav-item">Expérience</div>
+          <div class="preview-nav-item">Formation</div>
+          <div class="preview-nav-item">Compétences</div>
+          <div class="preview-nav-item">Langues</div>
+          <div class="preview-nav-item" style="margin-top: auto; color: var(--accent);">Analyse ATS</div>
+        </div>
+        <div class="preview-main">
+          <div class="preview-cv">
+            <div class="cv-name">Marie Dupont</div>
+            <div class="cv-title">Développeuse Full-Stack</div>
+            <div class="cv-line accent"></div>
+            <div class="cv-line w90"></div>
+            <div class="cv-line w75"></div>
+            <div class="cv-line w80"></div>
+            <div class="cv-line accent"></div>
+            <div class="cv-line w90"></div>
+            <div class="cv-line w60"></div>
+            <div class="cv-line w75"></div>
+            <div class="cv-line accent"></div>
+            <div class="cv-line w80"></div>
+            <div class="cv-line w60"></div>
+          </div>
+        </div>
+        <div class="preview-editor">
+          <div class="preview-field">
+            <label>Prénom</label>
+            <div class="input-fake">Marie</div>
+          </div>
+          <div class="preview-field">
+            <label>Nom</label>
+            <div class="input-fake">Dupont</div>
+          </div>
+          <div class="preview-field">
+            <label>Titre</label>
+            <div class="input-fake">Développeuse Full-Stack</div>
+          </div>
+          <div class="preview-field">
+            <label>Email</label>
+            <div class="input-fake">marie@email.com</div>
+          </div>
+          <div class="preview-field">
+            <label>Téléphone</label>
+            <div class="input-fake">+33 6 12 34 56 78</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <h2 class="features-title">Tout ce qu'il te faut</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">&#x1f3af;</div>
+        <h3>Score ATS</h3>
+        <p>Analyse ton CV en temps réel et optimise-le pour passer les filtres automatiques des recruteurs.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#x1f3a8;</div>
+        <h3>6 templates</h3>
+        <p>Classique, Moderne, Minimaliste, Executive, Créatif, Compact. Change en un clic.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#x1f512;</div>
+        <h3>100% privé</h3>
+        <p>Tes données restent sur ta machine. Aucun compte, aucun cloud, aucune inscription.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#x2728;</div>
+        <h3>Suggestions IA</h3>
+        <p>Reçois des conseils pour améliorer ton CV — fonctionne aussi sans IA, en mode local.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#x1f4cb;</div>
+        <h3>Match offre</h3>
+        <p>Colle une offre d'emploi et vois quels mots-clés correspondent à ton CV.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#x21a9;&#xfe0f;</div>
+        <h3>Undo/Redo</h3>
+        <p>Historique complet de tes modifications. Ctrl+Z pour revenir en arrière à tout moment.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bottom-cta">
+    <h2>Prête à décrocher le job ?</h2>
+    <p>Télécharge Skibidi Melyha 67 et commence à créer ton CV maintenant.</p>
+    <a href="https://github.com/M10-white/CV-ATS-IA/releases/latest" class="btn btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Télécharger gratuitement
+    </a>
+  </section>
+
+  <footer>
+    Fait avec amour pour Melyha &middot; <a href="https://github.com/M10-white/CV-ATS-IA">GitHub</a>
+  </footer>
+</div>
+
+</body>
+</html>
