@@ -66,11 +66,18 @@ export type SectionType =
   | "languages"
   | "custom";
 
+export type SectionItem =
+  | ExperienceItem
+  | EducationItem
+  | SkillCategory
+  | LanguageItem
+  | CustomSection;
+
 export interface CVSection {
   id: string;
   type: SectionType;
   visible: boolean;
-  items: ExperienceItem[] | EducationItem[] | SkillCategory[] | LanguageItem[] | CustomSection[];
+  items: SectionItem[];
 }
 
 export interface CVCustomization {
