@@ -11,8 +11,9 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<Variant, string> = {
-  primary: "bg-accent text-white hover:bg-accent/90 active:bg-accent/80",
-  secondary: "bg-surface text-ink border border-border hover:bg-border-light active:bg-border",
+  primary: "bg-accent text-white hover:bg-accent/90 active:bg-accent/80 shadow-sm hover:shadow",
+  secondary:
+    "bg-raised text-ink border border-border hover:border-border hover:bg-surface active:bg-border-light",
   ghost: "text-ink-secondary hover:bg-surface active:bg-border-light",
   danger: "bg-danger text-white hover:bg-danger/90 active:bg-danger/80",
 };
@@ -20,7 +21,7 @@ const variantStyles: Record<Variant, string> = {
 const sizeStyles: Record<Size, string> = {
   sm: "px-3 py-1.5 text-sm",
   md: "px-4 py-2 text-sm",
-  lg: "px-6 py-2.5 text-base",
+  lg: "px-5 py-2.5 text-base",
 };
 
 export function Button({
@@ -33,7 +34,7 @@ export function Button({
   const Comp = asChild ? Slot : "button";
   return (
     <Comp
-      className={`inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-50 ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-50 ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
       {...props}
     />
   );

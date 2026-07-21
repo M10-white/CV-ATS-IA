@@ -1,12 +1,17 @@
 import { useCVStore } from "../../stores/cvStore";
+import { AISuggestionsPanel } from "../ai/AISuggestionsPanel";
 import { ATSPanel } from "../ats/ATSPanel";
 import { JobMatchPanel } from "../ats/JobMatchPanel";
+import { CertificationsEditor } from "./CertificationsEditor";
 import { CustomizationPanel } from "./CustomizationPanel";
 import { EducationEditor } from "./EducationEditor";
 import { ExperienceEditor } from "./ExperienceEditor";
+import { HistoryPanel } from "./HistoryPanel";
 import { LanguagesEditor } from "./LanguagesEditor";
 import { ProfileEditor } from "./ProfileEditor";
+import { ProjectsEditor } from "./ProjectsEditor";
 import { SkillsEditor } from "./SkillsEditor";
+import { VolunteeringEditor } from "./VolunteeringEditor";
 
 export function SectionEditor() {
   const activeSectionId = useCVStore((s) => s.activeSectionId);
@@ -24,6 +29,11 @@ export function SectionEditor() {
   if (activeSectionId === "education") return <EducationEditor />;
   if (activeSectionId === "skills") return <SkillsEditor />;
   if (activeSectionId === "languages") return <LanguagesEditor />;
+  if (activeSectionId === "projects") return <ProjectsEditor />;
+  if (activeSectionId === "certifications") return <CertificationsEditor />;
+  if (activeSectionId === "volunteering") return <VolunteeringEditor />;
+  if (activeSectionId === "ai-suggestions") return <AISuggestionsPanel />;
+  if (activeSectionId === "history") return <HistoryPanel />;
   if (activeSectionId === "customization") return <CustomizationPanel />;
   if (activeSectionId === "ats") return <ATSPanel />;
   if (activeSectionId === "job-match") return <JobMatchPanel />;

@@ -1,9 +1,12 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../../components/ui";
 import { useCVStore } from "../../stores/cvStore";
 import type { CVData } from "../../types/cv";
 import { ClassicTemplate } from "./templates/ClassicTemplate";
+import { CompactTemplate } from "./templates/CompactTemplate";
+import { CreativeTemplate } from "./templates/CreativeTemplate";
+import { ExecutiveTemplate } from "./templates/ExecutiveTemplate";
 import { MinimalTemplate } from "./templates/MinimalTemplate";
 import { ModernTemplate } from "./templates/ModernTemplate";
 
@@ -11,12 +14,28 @@ const TEMPLATE_MAP: Record<string, React.ComponentType<{ cv: CVData }>> = {
   classic: ClassicTemplate,
   modern: ModernTemplate,
   minimal: MinimalTemplate,
+  executive: ExecutiveTemplate,
+  creative: CreativeTemplate,
+  compact: CompactTemplate,
 };
 
 export function CVPreview() {
   const { t } = useTranslation();
   const cv = useCVStore((s) => s.getCurrentCV());
   const previewRef = useRef<HTMLDivElement>(null);
+
+  const handleExportRef = useRef<(() => void) | undefined>(undefined);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "p") {
+        e.preventDefault();
+        handleExportRef.current?.();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   if (!cv) return null;
 
@@ -48,6 +67,8 @@ export function CVPreview() {
       printWindow.close();
     }, 250);
   };
+
+  handleExportRef.current = handleExport;
 
   return (
     <div className="flex flex-col items-center gap-4">

@@ -1,6 +1,8 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
+import { tauriStorage } from "../lib/tauriStorage";
 import type {
+  CertificationItem,
   CustomSection,
   CVData,
   CVProfile,
@@ -8,10 +10,13 @@ import type {
   EducationItem,
   ExperienceItem,
   LanguageItem,
+  ProjectItem,
   SectionType,
   SkillCategory,
+  VolunteerItem,
 } from "../types/cv";
 import { createEmptyCV } from "../types/cv";
+import { useHistoryStore } from "./historyStore";
 
 interface CVState {
   cvList: CVData[];
@@ -52,15 +57,39 @@ interface CVState {
 
   updateCustomSection: (sectionId: string, updates: Partial<CustomSection>) => void;
 
+  addProject: () => void;
+  updateProject: (itemId: string, updates: Partial<ProjectItem>) => void;
+  removeProject: (itemId: string) => void;
+
+  addCertification: () => void;
+  updateCertification: (itemId: string, updates: Partial<CertificationItem>) => void;
+  removeCertification: (itemId: string) => void;
+
+  addVolunteer: () => void;
+  updateVolunteer: (itemId: string, updates: Partial<VolunteerItem>) => void;
+  removeVolunteer: (itemId: string) => void;
+
+  addNewSection: (type: SectionType) => void;
+
+  undo: () => void;
+  redo: () => void;
+
   importCV: (data: CVData) => string;
   exportCV: (id: string) => CVData | null;
 }
 
+let lastSnapshotTime = 0;
+
 function updateCurrentCV(state: CVState, updater: (cv: CVData) => CVData): Partial<CVState> {
   if (!state.currentCVId) return {};
+  const now = Date.now();
   return {
     cvList: state.cvList.map((cv) => {
       if (cv.meta.id !== state.currentCVId) return cv;
+      if (now - lastSnapshotTime > 1000) {
+        useHistoryStore.getState().pushUndo(JSON.parse(JSON.stringify(cv)), "Modification");
+        lastSnapshotTime = now;
+      }
       const updated = updater(cv);
       updated.meta.modified = new Date().toISOString();
       return updated;
@@ -374,6 +403,177 @@ export const useCVStore = create<CVState>()(
         );
       },
 
+      addProject: () => {
+        const item: ProjectItem = {
+          id: crypto.randomUUID(),
+          name: "",
+          role: "",
+          url: "",
+          startDate: "",
+          endDate: "",
+          description: "",
+        };
+        set((state) =>
+          updateCurrentCV(state, (cv) =>
+            updateSection(cv, "projects", (s) => ({
+              ...s,
+              items: [...s.items, item],
+            })),
+          ),
+        );
+      },
+
+      updateProject: (itemId, updates) => {
+        set((state) =>
+          updateCurrentCV(state, (cv) =>
+            updateSection(cv, "projects", (s) => ({
+              ...s,
+              items: (s.items as ProjectItem[]).map((i) =>
+                i.id === itemId ? { ...i, ...updates } : i,
+              ),
+            })),
+          ),
+        );
+      },
+
+      removeProject: (itemId) => {
+        set((state) =>
+          updateCurrentCV(state, (cv) =>
+            updateSection(cv, "projects", (s) => ({
+              ...s,
+              items: (s.items as ProjectItem[]).filter((i) => i.id !== itemId),
+            })),
+          ),
+        );
+      },
+
+      addCertification: () => {
+        const item: CertificationItem = {
+          id: crypto.randomUUID(),
+          name: "",
+          issuer: "",
+          date: "",
+          url: "",
+        };
+        set((state) =>
+          updateCurrentCV(state, (cv) =>
+            updateSection(cv, "certifications", (s) => ({
+              ...s,
+              items: [...s.items, item],
+            })),
+          ),
+        );
+      },
+
+      updateCertification: (itemId, updates) => {
+        set((state) =>
+          updateCurrentCV(state, (cv) =>
+            updateSection(cv, "certifications", (s) => ({
+              ...s,
+              items: (s.items as CertificationItem[]).map((i) =>
+                i.id === itemId ? { ...i, ...updates } : i,
+              ),
+            })),
+          ),
+        );
+      },
+
+      removeCertification: (itemId) => {
+        set((state) =>
+          updateCurrentCV(state, (cv) =>
+            updateSection(cv, "certifications", (s) => ({
+              ...s,
+              items: (s.items as CertificationItem[]).filter((i) => i.id !== itemId),
+            })),
+          ),
+        );
+      },
+
+      addVolunteer: () => {
+        const item: VolunteerItem = {
+          id: crypto.randomUUID(),
+          organization: "",
+          role: "",
+          startDate: "",
+          endDate: "",
+          current: false,
+          description: "",
+        };
+        set((state) =>
+          updateCurrentCV(state, (cv) =>
+            updateSection(cv, "volunteering", (s) => ({
+              ...s,
+              items: [...s.items, item],
+            })),
+          ),
+        );
+      },
+
+      updateVolunteer: (itemId, updates) => {
+        set((state) =>
+          updateCurrentCV(state, (cv) =>
+            updateSection(cv, "volunteering", (s) => ({
+              ...s,
+              items: (s.items as VolunteerItem[]).map((i) =>
+                i.id === itemId ? { ...i, ...updates } : i,
+              ),
+            })),
+          ),
+        );
+      },
+
+      removeVolunteer: (itemId) => {
+        set((state) =>
+          updateCurrentCV(state, (cv) =>
+            updateSection(cv, "volunteering", (s) => ({
+              ...s,
+              items: (s.items as VolunteerItem[]).filter((i) => i.id !== itemId),
+            })),
+          ),
+        );
+      },
+
+      addNewSection: (type) => {
+        const cv = get().getCurrentCV();
+        if (!cv) return;
+        if (cv.sections.some((s) => s.type === type)) return;
+        const id = type;
+        const section: CVSection = { id, type, visible: true, items: [] };
+        set((state) =>
+          updateCurrentCV(state, (c) => ({
+            ...c,
+            sections: [...c.sections, section],
+          })),
+        );
+        set({ activeSectionId: id });
+      },
+
+      undo: () => {
+        const snapshot = useHistoryStore.getState().undo();
+        if (!snapshot) return;
+        const currentCv = get().getCurrentCV();
+        if (currentCv) {
+          useHistoryStore.setState((s) => ({
+            redoStack: [...s.redoStack, JSON.parse(JSON.stringify(currentCv))],
+          }));
+        }
+        set((state) => ({
+          cvList: state.cvList.map((cv) => (cv.meta.id === snapshot.meta.id ? snapshot : cv)),
+        }));
+      },
+
+      redo: () => {
+        const snapshot = useHistoryStore.getState().redo();
+        if (!snapshot) return;
+        const currentCv = get().getCurrentCV();
+        if (currentCv) {
+          useHistoryStore.getState().pushUndo(JSON.parse(JSON.stringify(currentCv)), "Redo");
+        }
+        set((state) => ({
+          cvList: state.cvList.map((cv) => (cv.meta.id === snapshot.meta.id ? snapshot : cv)),
+        }));
+      },
+
       importCV: (data) => {
         const newId = crypto.randomUUID();
         const now = new Date().toISOString();
@@ -394,6 +594,10 @@ export const useCVStore = create<CVState>()(
         return cv ? JSON.parse(JSON.stringify(cv)) : null;
       },
     }),
-    { name: "cv-architect-storage", partialize: (state) => ({ cvList: state.cvList }) },
+    {
+      name: "cv-architect-storage",
+      storage: createJSONStorage(() => tauriStorage),
+      partialize: (state) => ({ cvList: state.cvList }),
+    },
   ),
 );

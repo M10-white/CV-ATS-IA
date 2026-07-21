@@ -14,6 +14,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useCVStore } from "../../stores/cvStore";
 import type { SectionType } from "../../types/cv";
@@ -24,8 +25,17 @@ const SECTION_LABELS: Record<string, string> = {
   education: "editor.section.education.title",
   skills: "editor.section.skills.title",
   languages: "editor.section.languages.title",
+  projects: "editor.section.projects.title",
+  certifications: "editor.section.certifications.title",
+  volunteering: "editor.section.volunteering.title",
   custom: "editor.section.custom.title",
 };
+
+const ADDABLE_SECTIONS: { type: SectionType; label: string }[] = [
+  { type: "projects", label: "Projets" },
+  { type: "certifications", label: "Certifications" },
+  { type: "volunteering", label: "Bénévolat" },
+];
 
 function SortableItem({
   id,
@@ -96,6 +106,8 @@ export function SectionNav() {
   const setActiveSection = useCVStore((s) => s.setActiveSection);
   const toggleSectionVisibility = useCVStore((s) => s.toggleSectionVisibility);
   const reorderSections = useCVStore((s) => s.reorderSections);
+  const addNewSection = useCVStore((s) => s.addNewSection);
+  const [showAddMenu, setShowAddMenu] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -153,7 +165,63 @@ export function SectionNav() {
         </SortableContext>
       </DndContext>
 
+      {(() => {
+        const existing = cv.sections.map((s) => s.type);
+        const available = ADDABLE_SECTIONS.filter((s) => !existing.includes(s.type));
+        if (available.length === 0) return null;
+        return (
+          <div className="relative mt-2 px-3">
+            <button
+              type="button"
+              onClick={() => setShowAddMenu(!showAddMenu)}
+              className="text-xs text-accent hover:text-accent/80 transition-colors"
+            >
+              + Ajouter une section
+            </button>
+            {showAddMenu && (
+              <div className="absolute left-3 top-6 z-10 bg-raised border border-border-light rounded-md shadow-md py-1 min-w-[160px]">
+                {available.map((s) => (
+                  <button
+                    key={s.type}
+                    type="button"
+                    onClick={() => {
+                      addNewSection(s.type);
+                      setShowAddMenu(false);
+                    }}
+                    className="block w-full text-left px-3 py-1.5 text-sm text-ink-secondary hover:bg-border-light transition-colors"
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
       <div className="mt-auto pt-3 border-t border-border-light flex flex-col gap-1">
+        <button
+          type="button"
+          onClick={() => setActiveSection("history")}
+          className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm w-full transition-colors ${
+            activeSectionId === "history"
+              ? "bg-accent-dim text-accent-text font-medium"
+              : "text-ink-secondary hover:bg-border-light"
+          }`}
+        >
+          Historique
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveSection("ai-suggestions")}
+          className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm w-full transition-colors ${
+            activeSectionId === "ai-suggestions"
+              ? "bg-accent-dim text-accent-text font-medium"
+              : "text-ink-secondary hover:bg-border-light"
+          }`}
+        >
+          Suggestions IA
+        </button>
         <button
           type="button"
           onClick={() => setActiveSection("customization")}

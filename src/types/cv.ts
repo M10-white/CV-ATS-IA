@@ -11,6 +11,7 @@ export interface CVMeta {
 export interface CVProfile {
   firstName: string;
   lastName: string;
+  photo: string;
   jobTitle: string;
   email: string;
   phone: string;
@@ -52,6 +53,34 @@ export interface LanguageItem {
   level: string;
 }
 
+export interface ProjectItem {
+  id: string;
+  name: string;
+  role: string;
+  url: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+}
+
+export interface CertificationItem {
+  id: string;
+  name: string;
+  issuer: string;
+  date: string;
+  url: string;
+}
+
+export interface VolunteerItem {
+  id: string;
+  organization: string;
+  role: string;
+  startDate: string;
+  endDate: string;
+  current: boolean;
+  description: string;
+}
+
 export interface CustomSection {
   id: string;
   title: string;
@@ -64,6 +93,9 @@ export type SectionType =
   | "education"
   | "skills"
   | "languages"
+  | "projects"
+  | "certifications"
+  | "volunteering"
   | "custom";
 
 export type SectionItem =
@@ -71,6 +103,9 @@ export type SectionItem =
   | EducationItem
   | SkillCategory
   | LanguageItem
+  | ProjectItem
+  | CertificationItem
+  | VolunteerItem
   | CustomSection;
 
 export interface CVSection {
@@ -117,6 +152,7 @@ export function createEmptyCV(id: string, profileId: string): CVData {
     profile: {
       firstName: "",
       lastName: "",
+      photo: "",
       jobTitle: "",
       email: "",
       phone: "",

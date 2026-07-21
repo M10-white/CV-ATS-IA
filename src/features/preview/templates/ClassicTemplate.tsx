@@ -1,17 +1,24 @@
 import type {
+  CertificationItem,
   CVData,
   EducationItem,
   ExperienceItem,
   LanguageItem,
+  ProjectItem,
   SkillCategory,
+  VolunteerItem,
 } from "../../../types/cv";
 import {
+  CertificationsBlock,
   ContactLine,
   EducationBlock,
   ExperienceBlock,
   getVisibleSections,
   LanguagesBlock,
+  ProfilePhoto,
+  ProjectsBlock,
   SkillsBlock,
+  VolunteerBlock,
 } from "./shared";
 
 function SectionTitle({ title, accent }: { title: string; accent: string }) {
@@ -38,6 +45,9 @@ const SECTION_TITLES: Record<string, string> = {
   education: "Formation",
   skills: "Compétences",
   languages: "Langues",
+  projects: "Projets",
+  certifications: "Certifications",
+  volunteering: "Bénévolat",
 };
 
 export function ClassicTemplate({ cv }: { cv: CVData }) {
@@ -60,6 +70,11 @@ export function ClassicTemplate({ cv }: { cv: CVData }) {
       }}
     >
       <div style={{ textAlign: "center", marginBottom: "20px" }}>
+        {p.photo && (
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>
+            <ProfilePhoto src={p.photo} size={80} />
+          </div>
+        )}
         {(p.firstName || p.lastName) && (
           <h1
             style={{ fontSize: "18pt", fontWeight: 700, letterSpacing: "-0.02em", color: accent }}
@@ -94,6 +109,13 @@ export function ClassicTemplate({ cv }: { cv: CVData }) {
           {section.type === "skills" && <SkillsBlock items={section.items as SkillCategory[]} />}
           {section.type === "languages" && (
             <LanguagesBlock items={section.items as LanguageItem[]} />
+          )}
+          {section.type === "projects" && <ProjectsBlock items={section.items as ProjectItem[]} />}
+          {section.type === "certifications" && (
+            <CertificationsBlock items={section.items as CertificationItem[]} />
+          )}
+          {section.type === "volunteering" && (
+            <VolunteerBlock items={section.items as VolunteerItem[]} />
           )}
         </div>
       ))}

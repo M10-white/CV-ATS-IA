@@ -10,9 +10,61 @@ export function ProfileEditor() {
   if (!cv) return null;
   const p = cv.profile;
 
+  const handlePhotoUpload = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          updateProfile({ photo: reader.result });
+        }
+      };
+      reader.readAsDataURL(file);
+    };
+    input.click();
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <h3 className="text-sm font-semibold text-ink">{t("editor.section.profile.title")}</h3>
+
+      <div className="flex items-center gap-4">
+        {p.photo ? (
+          <img
+            src={p.photo}
+            alt="Photo"
+            className="w-16 h-16 rounded-full object-cover border-2 border-border"
+          />
+        ) : (
+          <div className="w-16 h-16 rounded-full bg-border-light flex items-center justify-center text-ink-muted text-xs">
+            Photo
+          </div>
+        )}
+        <div className="flex flex-col gap-1">
+          <button
+            type="button"
+            onClick={handlePhotoUpload}
+            className="text-xs text-accent hover:underline"
+          >
+            {p.photo ? "Changer la photo" : "Ajouter une photo"}
+          </button>
+          {p.photo && (
+            <button
+              type="button"
+              onClick={() => updateProfile({ photo: "" })}
+              className="text-xs text-red-500 hover:underline"
+            >
+              Supprimer
+            </button>
+          )}
+        </div>
+      </div>
+
       <div className="grid grid-cols-2 gap-3">
         <Input
           id="firstName"

@@ -15,7 +15,7 @@ export function Input({ label, error, id, className = "", ...props }: InputProps
       )}
       <input
         id={id}
-        className={`rounded-md border border-border bg-raised px-3 py-2 text-sm text-ink placeholder:text-ink-muted transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-50 ${error ? "border-danger" : ""} ${className}`}
+        className={`rounded-xl border border-border bg-raised px-3 py-2 text-sm text-ink placeholder:text-ink-muted transition-all duration-150 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 ${error ? "border-danger" : ""} ${className}`}
         {...props}
       />
       {error && <p className="text-xs text-danger">{error}</p>}
@@ -38,7 +38,7 @@ export function Textarea({ label, error, id, className = "", ...props }: Textare
       )}
       <textarea
         id={id}
-        className={`rounded-md border border-border bg-raised px-3 py-2 text-sm text-ink placeholder:text-ink-muted transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-50 resize-y min-h-20 ${error ? "border-danger" : ""} ${className}`}
+        className={`rounded-xl border border-border bg-raised px-3 py-2 text-sm text-ink placeholder:text-ink-muted transition-all duration-150 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 resize-y min-h-20 ${error ? "border-danger" : ""} ${className}`}
         {...props}
       />
       {error && <p className="text-xs text-danger">{error}</p>}

@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "CV Architect AI",
-    "tagline": "Créez des CV qui passent les filtres ATS"
+    "name": "Skibidi Melyha 67",
+    "tagline": "#RechercheD'Emploi"
   },
   "nav": {
     "newCv": "Nouveau CV",
@@ -64,6 +64,27 @@
         "language": "Langue",
         "level": "Niveau",
         "addItem": "Ajouter une langue"
+      },
+      "projects": {
+        "title": "Projets",
+        "name": "Nom du projet",
+        "role": "Rôle",
+        "url": "Lien",
+        "addItem": "Ajouter un projet"
+      },
+      "certifications": {
+        "title": "Certifications",
+        "name": "Certification",
+        "issuer": "Organisme",
+        "date": "Date d'obtention",
+        "url": "Lien de vérification",
+        "addItem": "Ajouter une certification"
+      },
+      "volunteering": {
+        "title": "Bénévolat",
+        "organization": "Organisation",
+        "role": "Rôle",
+        "addItem": "Ajouter une expérience"
       },
       "custom": {
         "title": "Section personnalisée",

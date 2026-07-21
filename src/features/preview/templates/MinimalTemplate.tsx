@@ -1,16 +1,23 @@
 import type {
+  CertificationItem,
   CVData,
   EducationItem,
   ExperienceItem,
   LanguageItem,
+  ProjectItem,
   SkillCategory,
+  VolunteerItem,
 } from "../../../types/cv";
 import {
+  CertificationsBlock,
   EducationBlock,
   ExperienceBlock,
   getVisibleSections,
   LanguagesBlock,
+  ProfilePhoto,
+  ProjectsBlock,
   SkillsBlock,
+  VolunteerBlock,
 } from "./shared";
 
 function SectionTitle({ title }: { title: string }) {
@@ -37,6 +44,9 @@ const SECTION_TITLES: Record<string, string> = {
   education: "Formation",
   skills: "Compétences",
   languages: "Langues",
+  projects: "Projets",
+  certifications: "Certifications",
+  volunteering: "Bénévolat",
 };
 
 export function MinimalTemplate({ cv }: { cv: CVData }) {
@@ -57,35 +67,45 @@ export function MinimalTemplate({ cv }: { cv: CVData }) {
         fontFamily: `'${font}', system-ui, sans-serif`,
       }}
     >
-      <div style={{ marginBottom: "24px" }}>
-        {(p.firstName || p.lastName) && (
-          <h1
-            style={{ fontSize: "16pt", fontWeight: 400, letterSpacing: "0.04em", color: "#1a1d23" }}
+      <div style={{ marginBottom: "24px", display: "flex", alignItems: "center", gap: "16px" }}>
+        {p.photo && <ProfilePhoto src={p.photo} size={65} />}
+        <div>
+          {(p.firstName || p.lastName) && (
+            <h1
+              style={{
+                fontSize: "16pt",
+                fontWeight: 400,
+                letterSpacing: "0.04em",
+                color: "#1a1d23",
+              }}
+            >
+              {p.firstName} <span style={{ fontWeight: 700 }}>{p.lastName}</span>
+            </h1>
+          )}
+          {p.jobTitle && (
+            <p style={{ fontSize: "10pt", color: "#777", marginTop: "2px" }}>{p.jobTitle}</p>
+          )}
+          <div
+            style={{
+              marginTop: "8px",
+              display: "flex",
+              gap: "10px",
+              flexWrap: "wrap",
+              fontSize: "8.5pt",
+              color: "#999",
+            }}
           >
-            {p.firstName} <span style={{ fontWeight: 700 }}>{p.lastName}</span>
-          </h1>
-        )}
-        {p.jobTitle && (
-          <p style={{ fontSize: "10pt", color: "#777", marginTop: "2px" }}>{p.jobTitle}</p>
-        )}
-        <div
-          style={{
-            marginTop: "8px",
-            display: "flex",
-            gap: "10px",
-            flexWrap: "wrap",
-            fontSize: "8.5pt",
-            color: "#999",
-          }}
-        >
-          {[p.email, p.phone, p.location, p.linkedin, p.website]
-            .filter(Boolean)
-            .map((item, i, arr) => (
-              <span key={item}>
-                {item}
-                {i < arr.length - 1 && <span style={{ margin: "0 2px", color: "#ccc" }}> · </span>}
-              </span>
-            ))}
+            {[p.email, p.phone, p.location, p.linkedin, p.website]
+              .filter(Boolean)
+              .map((item, i, arr) => (
+                <span key={item}>
+                  {item}
+                  {i < arr.length - 1 && (
+                    <span style={{ margin: "0 2px", color: "#ccc" }}> · </span>
+                  )}
+                </span>
+              ))}
+          </div>
         </div>
       </div>
 
@@ -108,6 +128,13 @@ export function MinimalTemplate({ cv }: { cv: CVData }) {
           {section.type === "skills" && <SkillsBlock items={section.items as SkillCategory[]} />}
           {section.type === "languages" && (
             <LanguagesBlock items={section.items as LanguageItem[]} />
+          )}
+          {section.type === "projects" && <ProjectsBlock items={section.items as ProjectItem[]} />}
+          {section.type === "certifications" && (
+            <CertificationsBlock items={section.items as CertificationItem[]} />
+          )}
+          {section.type === "volunteering" && (
+            <VolunteerBlock items={section.items as VolunteerItem[]} />
           )}
         </div>
       ))}
