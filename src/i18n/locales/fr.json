@@ -1,0 +1,118 @@
+{
+  "app": {
+    "name": "CV Architect AI",
+    "tagline": "Créez des CV qui passent les filtres ATS"
+  },
+  "nav": {
+    "newCv": "Nouveau CV",
+    "openCv": "Ouvrir un CV",
+    "settings": "Paramètres",
+    "export": "Exporter PDF"
+  },
+  "home": {
+    "title": "Bienvenue",
+    "subtitle": "Créez un CV professionnel optimisé pour les ATS",
+    "newCv": "Nouveau CV",
+    "openCv": "Ouvrir un CV existant",
+    "recentCvs": "CV récents",
+    "noCvs": "Aucun CV pour le moment"
+  },
+  "editor": {
+    "sections": "Sections",
+    "addSection": "Ajouter une section",
+    "section": {
+      "profile": {
+        "title": "Identité",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "jobTitle": "Titre professionnel",
+        "email": "Email",
+        "phone": "Téléphone",
+        "location": "Localisation",
+        "summary": "Résumé professionnel",
+        "linkedin": "LinkedIn",
+        "website": "Site web"
+      },
+      "experience": {
+        "title": "Expérience professionnelle",
+        "company": "Entreprise",
+        "position": "Poste",
+        "startDate": "Date de début",
+        "endDate": "Date de fin",
+        "current": "Poste actuel",
+        "description": "Description",
+        "addItem": "Ajouter une expérience"
+      },
+      "education": {
+        "title": "Formation",
+        "institution": "Établissement",
+        "degree": "Diplôme",
+        "field": "Domaine",
+        "startDate": "Date de début",
+        "endDate": "Date de fin",
+        "description": "Description",
+        "addItem": "Ajouter une formation"
+      },
+      "skills": {
+        "title": "Compétences",
+        "category": "Catégorie",
+        "items": "Compétences",
+        "addCategory": "Ajouter une catégorie"
+      },
+      "languages": {
+        "title": "Langues",
+        "language": "Langue",
+        "level": "Niveau",
+        "addItem": "Ajouter une langue"
+      },
+      "custom": {
+        "title": "Section personnalisée",
+        "sectionTitle": "Titre de la section",
+        "content": "Contenu"
+      }
+    }
+  },
+  "ats": {
+    "score": "Score ATS",
+    "diagnostic": "Diagnostic",
+    "readability": "Lisibilité",
+    "structure": "Structure",
+    "extraction": "Extraction",
+    "content": "Contenu",
+    "alerts": "Alertes",
+    "critical": "Critique",
+    "warning": "Avertissement",
+    "suggestion": "Suggestion",
+    "parserView": "Vue parseur",
+    "noAlerts": "Aucune alerte"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "theme": "Thème",
+    "themeLight": "Clair",
+    "themeDark": "Sombre",
+    "themeSystem": "Système",
+    "ai": "Intelligence artificielle",
+    "aiProvider": "Fournisseur",
+    "aiModel": "Modèle",
+    "aiStatus": "Statut",
+    "aiConnected": "Connecté",
+    "aiDisconnected": "Déconnecté",
+    "aiNone": "Aucun"
+  },
+  "actions": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "duplicate": "Dupliquer",
+    "rename": "Renommer",
+    "export": "Exporter",
+    "import": "Importer",
+    "close": "Fermer",
+    "confirm": "Confirmer"
+  },
+  "theme": {
+    "toggle": "Changer de thème"
+  }
+}
