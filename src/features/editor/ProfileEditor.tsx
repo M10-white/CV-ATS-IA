@@ -51,7 +51,7 @@ export function ProfileEditor() {
             onClick={handlePhotoUpload}
             className="text-xs text-accent hover:underline"
           >
-            {p.photo ? "Changer la photo" : "Ajouter une photo"}
+            {p.photo ? t("editor.section.profile.changePhoto") : t("editor.section.profile.addPhoto")}
           </button>
           {p.photo && (
             <button
@@ -59,7 +59,7 @@ export function ProfileEditor() {
               onClick={() => updateProfile({ photo: "" })}
               className="text-xs text-red-500 hover:underline"
             >
-              Supprimer
+              {t("actions.delete")}
             </button>
           )}
         </div>

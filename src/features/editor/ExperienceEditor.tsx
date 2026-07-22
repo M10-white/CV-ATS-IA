@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { useToast } from "../../components/Toast";
 import { Button, Input, Textarea } from "../../components/ui";
 import { useCVStore } from "../../stores/cvStore";
 import type { ExperienceItem } from "../../types/cv";
@@ -9,6 +10,26 @@ export function ExperienceEditor() {
   const addExperience = useCVStore((s) => s.addExperience);
   const updateExperience = useCVStore((s) => s.updateExperience);
   const removeExperience = useCVStore((s) => s.removeExperience);
+  const toast = useToast((s) => s.show);
+
+  const duplicateExperience = (item: ExperienceItem) => {
+    addExperience();
+    const updated = useCVStore.getState().getCurrentCV();
+    if (!updated) return;
+    const section = updated.sections.find((s) => s.type === "experience");
+    const newItem = section?.items[section.items.length - 1] as ExperienceItem | undefined;
+    if (newItem) {
+      updateExperience(newItem.id, {
+        company: item.company,
+        position: item.position,
+        startDate: item.startDate,
+        endDate: item.endDate,
+        current: item.current,
+        description: item.description,
+      });
+      toast(t("actions.duplicate") + " !");
+    }
+  };
 
   if (!cv) return null;
   const section = cv.sections.find((s) => s.type === "experience");
@@ -37,13 +58,22 @@ export function ExperienceEditor() {
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-ink-muted">#{index + 1}</span>
-            <button
-              type="button"
-              onClick={() => removeExperience(item.id)}
-              className="text-xs text-danger hover:text-danger/80 transition-colors"
-            >
-              {t("actions.delete")}
-            </button>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => duplicateExperience(item)}
+                className="text-xs text-ink-muted hover:text-ink transition-colors"
+              >
+                {t("actions.duplicate")}
+              </button>
+              <button
+                type="button"
+                onClick={() => removeExperience(item.id)}
+                className="text-xs text-danger hover:text-danger/80 transition-colors"
+              >
+                {t("actions.delete")}
+              </button>
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <Input

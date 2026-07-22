@@ -41,7 +41,9 @@
         "location": "Localisation",
         "summary": "Résumé professionnel",
         "linkedin": "LinkedIn",
-        "website": "Site web"
+        "website": "Site web",
+        "addPhoto": "Ajouter une photo",
+        "changePhoto": "Changer la photo"
       },
       "experience": {
         "title": "Expérience professionnelle",
@@ -142,6 +144,10 @@
     "import": "Importer",
     "close": "Fermer",
     "confirm": "Confirmer"
+  },
+  "about": {
+    "description": "Application gratuite pour créer des CV professionnels optimisés ATS. Tes données restent sur ta machine.",
+    "madeFor": "Fait pour Melyha"
   },
   "theme": {
     "toggle": "Changer de thème"

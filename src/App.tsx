@@ -1,5 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { AboutModal } from "./components/AboutModal";
+import { ToastContainer } from "./components/Toast";
 import { HomeScreen } from "./components/HomeScreen";
 import { KeyboardShortcuts } from "./components/KeyboardShortcuts";
 import { MotivationalBackground } from "./components/MotivationalBackground";
@@ -42,6 +44,7 @@ export function App() {
   return (
     <>
       <KeyboardShortcuts />
+      <ToastContainer />
       <EditorLayout cv={cv} onBack={() => selectCV(null)} />
     </>
   );
@@ -75,6 +78,7 @@ function EditorLayout({
   onBack: () => void;
 }) {
   const { t } = useTranslation();
+  const [showAbout, setShowAbout] = useState(false);
 
   const displayName =
     cv.profile.firstName || cv.profile.lastName
@@ -83,6 +87,7 @@ function EditorLayout({
 
   return (
     <div className="flex flex-col h-screen">
+      {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
       <header className="flex items-center justify-between px-4 h-13 border-b border-border bg-surface/80 backdrop-blur-sm shrink-0">
         <div className="flex items-center gap-3">
           <button
@@ -101,6 +106,14 @@ function EditorLayout({
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowAbout(true)}
+            className="text-xs text-ink-muted hover:text-ink px-2 py-1 rounded-md transition-colors"
+            title="À propos"
+          >
+            ?
+          </button>
           <LanguageSelector />
           <ThemeToggle />
         </div>

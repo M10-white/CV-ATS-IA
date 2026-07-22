@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useCVStore } from "../../stores/cvStore";
 
 function extractKeywords(text: string): string[] {
@@ -130,8 +131,10 @@ function getCVText(cv: ReturnType<typeof useCVStore.getState>["cvList"][0]): str
 }
 
 export function JobMatchPanel() {
+  const { t } = useTranslation();
   const cv = useCVStore((s) => s.getCurrentCV());
   const [jobText, setJobText] = useState("");
+  const [highlighted, setHighlighted] = useState(false);
 
   const analysis = useMemo(() => {
     if (!cv || !jobText.trim()) return null;
@@ -155,13 +158,69 @@ export function JobMatchPanel() {
     return { jobKeywords, matched, missing, score };
   }, [cv, jobText]);
 
+  const toggleHighlight = useCallback(() => {
+    if (!analysis) return;
+    const previewEl = document.querySelector("[data-preview]");
+    if (!previewEl) return;
+
+    if (highlighted) {
+      previewEl.querySelectorAll("mark[data-job-match]").forEach((m) => {
+        const parent = m.parentNode;
+        if (parent) {
+          parent.replaceChild(document.createTextNode(m.textContent ?? ""), m);
+          parent.normalize();
+        }
+      });
+      setHighlighted(false);
+      return;
+    }
+
+    const regex = new RegExp(`\\b(${analysis.matched.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})\\b`, "gi");
+    const walker = document.createTreeWalker(previewEl, NodeFilter.SHOW_TEXT);
+    const textNodes: Text[] = [];
+    let node: Text | null;
+    while ((node = walker.nextNode() as Text | null)) {
+      if (node.textContent && regex.test(node.textContent)) {
+        textNodes.push(node);
+        regex.lastIndex = 0;
+      }
+    }
+
+    for (const textNode of textNodes) {
+      const text = textNode.textContent ?? "";
+      const frag = document.createDocumentFragment();
+      let lastIndex = 0;
+      regex.lastIndex = 0;
+      let match: RegExpExecArray | null;
+      while ((match = regex.exec(text)) !== null) {
+        if (match.index > lastIndex) {
+          frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+        }
+        const mark = document.createElement("mark");
+        mark.setAttribute("data-job-match", "");
+        mark.style.backgroundColor = "rgba(34, 197, 94, 0.3)";
+        mark.style.borderRadius = "2px";
+        mark.style.padding = "0 1px";
+        mark.textContent = match[0];
+        frag.appendChild(mark);
+        lastIndex = regex.lastIndex;
+      }
+      if (lastIndex < text.length) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+      }
+      textNode.parentNode?.replaceChild(frag, textNode);
+    }
+
+    setHighlighted(true);
+  }, [analysis, highlighted]);
+
   if (!cv) return null;
 
   return (
     <div className="flex flex-col gap-4">
       <div>
         <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted mb-2">
-          Offre d'emploi
+          {t("editor.section.experience.title") ? "Offre d'emploi" : "Job offer"}
         </p>
         <textarea
           value={jobText}
@@ -190,6 +249,20 @@ export function JobMatchPanel() {
               {analysis.matched.length}/{analysis.jobKeywords.length} mots-clés trouvés
             </p>
           </div>
+
+          {analysis.matched.length > 0 && (
+            <button
+              type="button"
+              onClick={toggleHighlight}
+              className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${
+                highlighted
+                  ? "bg-green-100 border-green-300 text-green-700"
+                  : "bg-surface border-border text-ink-secondary hover:border-accent"
+              }`}
+            >
+              {highlighted ? "Retirer le surlignage" : "Surligner dans le CV"}
+            </button>
+          )}
 
           {analysis.matched.length > 0 && (
             <div>

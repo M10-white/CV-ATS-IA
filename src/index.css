@@ -94,3 +94,15 @@
     scrollbar-color: var(--color-border) transparent;
   }
 }
+
+@media print {
+  body { background: white !important; }
+  header, aside, nav, .no-print { display: none !important; }
+  main { display: block !important; }
+  main > * { overflow: visible !important; }
+  [data-preview] {
+    transform: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+  }
+}
