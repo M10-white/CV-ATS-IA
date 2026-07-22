@@ -504,7 +504,7 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
           className="text-center text-[10px] text-ink-muted/50 mt-10 tracking-wide"
           style={{ animation: "taglineFade 1s ease 1.2s both" }}
         >
-          v0.1.0
+          v0.2.0
         </p>
       </div>
 

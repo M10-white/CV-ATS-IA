@@ -166,7 +166,7 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
               color: "var(--color-accent-text)",
             }}
           >
-            v0.1.0
+            v0.2.0
           </div>
 
           <h2 className="text-xl font-black text-ink mb-1">{t("app.name")}</h2>
