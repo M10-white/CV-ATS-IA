@@ -43,3 +43,5 @@ jobs:
           releaseBody: 'Nouvelle version disponible ! Télécharge le setup ci-dessous.'
           releaseDraft: false
           prerelease: false
+          includeUpdaterJson: true
+          updaterJsonPreferNsis: true
