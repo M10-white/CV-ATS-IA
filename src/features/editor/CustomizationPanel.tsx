@@ -141,11 +141,26 @@ export function CustomizationPanel() {
               key={tmpl.id}
               type="button"
               onClick={() => setTemplate(tmpl.id)}
-              className={`flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all ${
-                cv.meta.template === tmpl.id
-                  ? "border-accent bg-accent/5 shadow-sm"
-                  : "border-border-light hover:border-border"
-              }`}
+              className="flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 cursor-pointer"
+              style={{
+                borderColor: cv.meta.template === tmpl.id ? "var(--color-accent)" : "var(--color-border-light)",
+                background: cv.meta.template === tmpl.id ? "var(--color-accent-dim)" : "transparent",
+                boxShadow: cv.meta.template === tmpl.id ? "0 4px 12px -4px color-mix(in srgb, var(--color-accent), transparent 60%)" : "none",
+                transform: cv.meta.template === tmpl.id ? "scale(1.03)" : "scale(1)",
+                transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+              }}
+              onMouseEnter={(e) => {
+                if (cv.meta.template !== tmpl.id) {
+                  (e.currentTarget as HTMLElement).style.borderColor = "color-mix(in srgb, var(--color-accent), transparent 50%)";
+                  (e.currentTarget as HTMLElement).style.transform = "scale(1.02)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (cv.meta.template !== tmpl.id) {
+                  (e.currentTarget as HTMLElement).style.borderColor = "var(--color-border-light)";
+                  (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+                }
+              }}
             >
               <div className="w-full aspect-[3/4] rounded-lg overflow-hidden border border-border-light bg-white">
                 <TemplateThumbnail id={tmpl.id} active={cv.meta.template === tmpl.id} />
@@ -166,12 +181,24 @@ export function CustomizationPanel() {
               key={color}
               type="button"
               onClick={() => updateCustomization({ colors: { accent: color } })}
-              className={`w-7 h-7 rounded-lg border-2 transition-transform ${
-                cv.customization.colors.accent === color
-                  ? "border-ink scale-110"
-                  : "border-transparent hover:scale-105"
-              }`}
-              style={{ backgroundColor: color }}
+              className="w-7 h-7 rounded-lg border-2 cursor-pointer"
+              style={{
+                backgroundColor: color,
+                borderColor: cv.customization.colors.accent === color ? "var(--color-ink)" : "transparent",
+                transform: cv.customization.colors.accent === color ? "scale(1.15)" : "scale(1)",
+                boxShadow: cv.customization.colors.accent === color ? `0 2px 10px -2px ${color}` : "none",
+                transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+              }}
+              onMouseEnter={(e) => {
+                if (cv.customization.colors.accent !== color) {
+                  (e.currentTarget as HTMLElement).style.transform = "scale(1.1)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (cv.customization.colors.accent !== color) {
+                  (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+                }
+              }}
               title={color}
             />
           ))}

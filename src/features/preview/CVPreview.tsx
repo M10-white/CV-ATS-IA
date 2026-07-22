@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Confetti } from "../../components/Confetti";
 import { useToast } from "../../components/Toast";
 import { Button } from "../../components/ui";
 import { exportToDocx } from "../../lib/exportDocx";
@@ -28,8 +29,11 @@ export function CVPreview() {
   const previewRef = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  const [confetti, setConfetti] = useState(false);
 
   const handleExportRef = useRef<(() => void) | undefined>(undefined);
+
+  const stopConfetti = useCallback(() => setConfetti(false), []);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -58,6 +62,7 @@ export function CVPreview() {
     setExporting(true);
     try {
       await exportToPdf(previewRef.current, getFilename());
+      setConfetti(true);
       toast("PDF exporté !");
     } finally {
       setExporting(false);
@@ -69,6 +74,7 @@ export function CVPreview() {
     setExporting(true);
     try {
       await exportToDocx(cv, getFilename());
+      setConfetti(true);
       toast("Word exporté !");
     } finally {
       setExporting(false);
@@ -77,53 +83,118 @@ export function CVPreview() {
 
   handleExportRef.current = handleExportPdf;
 
+  const exportBar = (
+    <div className="flex items-center gap-2">
+      <button
+        type="button"
+        onClick={handleExportPdf}
+        disabled={exporting}
+        className="group relative inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-sm font-medium text-white cursor-pointer disabled:opacity-50 disabled:pointer-events-none overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, var(--color-accent), color-mix(in oklch, var(--color-accent), #6366f1 20%))",
+          boxShadow: "0 4px 14px -4px color-mix(in srgb, var(--color-accent), transparent 50%)",
+          transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(-1px) scale(1.03)"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(0) scale(1)"; }}
+      >
+        <span className="relative z-10">{exporting ? "..." : t("nav.export")}</span>
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
+            animation: "shimmer 2s infinite",
+          }}
+        />
+      </button>
+      <Button size="sm" variant="secondary" onClick={handleExportDocx} disabled={exporting}>
+        {exporting ? "..." : "Word (.docx)"}
+      </Button>
+      <button
+        type="button"
+        onClick={() => setFullscreen(!fullscreen)}
+        className="text-ink-muted hover:text-ink text-sm w-8 h-8 flex items-center justify-center rounded-xl hover:bg-border-light transition-all duration-200 hover:scale-110"
+        title="Plein écran"
+      >
+        {fullscreen ? "✕" : "⛶"}
+      </button>
+    </div>
+  );
+
   if (fullscreen) {
     return (
-      <div className="fixed inset-0 z-40 bg-black/80 flex flex-col items-center overflow-auto">
-        <div className="sticky top-0 z-10 flex items-center gap-3 py-3 px-4 bg-black/60 backdrop-blur-sm w-full justify-center">
-          <Button size="sm" onClick={handleExportPdf} disabled={exporting}>
-            {exporting ? "..." : t("nav.export")}
-          </Button>
-          <Button size="sm" variant="secondary" onClick={handleExportDocx} disabled={exporting}>
-            {exporting ? "..." : "Word (.docx)"}
-          </Button>
-          <Button size="sm" variant="ghost" onClick={() => setFullscreen(false)} className="text-white">
-            ✕
-          </Button>
+      <>
+        <Confetti active={confetti} onDone={stopConfetti} />
+        <div className="fixed inset-0 z-40 bg-black/80 flex flex-col items-center overflow-auto">
+          <div
+            className="sticky top-0 z-10 flex items-center gap-3 py-3 px-4 w-full justify-center"
+            style={{
+              background: "rgba(0,0,0,0.6)",
+              backdropFilter: "blur(12px)",
+            }}
+          >
+            {exportBar}
+          </div>
+          <div
+            ref={previewRef}
+            className="my-6"
+            data-preview
+            style={{
+              boxShadow: "0 25px 60px -12px rgba(0,0,0,0.5)",
+              animation: "previewReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both",
+            }}
+          >
+            <Template cv={cv} />
+          </div>
         </div>
-        <div ref={previewRef} className="shadow-2xl my-6" data-preview>
-          <Template cv={cv} />
-        </div>
-      </div>
+        <style>{`
+          @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+          }
+          @keyframes previewReveal {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+          }
+        `}</style>
+      </>
     );
   }
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-3">
-        <Button size="sm" onClick={handleExportPdf} disabled={exporting}>
-          {exporting ? "..." : t("nav.export")}
-        </Button>
-        <Button size="sm" variant="secondary" onClick={handleExportDocx} disabled={exporting}>
-          {exporting ? "..." : "Word (.docx)"}
-        </Button>
-        <button
-          type="button"
-          onClick={() => setFullscreen(true)}
-          className="text-ink-muted hover:text-ink text-sm px-2 py-1 rounded-md hover:bg-border-light transition-colors"
-          title="Plein écran"
+    <>
+      <Confetti active={confetti} onDone={stopConfetti} />
+      <div className="flex flex-col items-center gap-4">
+        {exportBar}
+        <div
+          className="relative"
+          style={{
+            transform: "scale(0.75)",
+            transformOrigin: "top center",
+          }}
         >
-          ⛶
-        </button>
+          <div
+            className="absolute -inset-1 rounded-lg opacity-30"
+            style={{
+              background: "linear-gradient(135deg, var(--color-accent), color-mix(in oklch, var(--color-accent), #6366f1), var(--color-accent))",
+              backgroundSize: "200% 200%",
+              animation: "glowShift 6s ease-in-out infinite",
+              filter: "blur(8px)",
+            }}
+          />
+          <div
+            ref={previewRef}
+            className="relative"
+            data-preview
+            style={{
+              boxShadow: "0 8px 30px -8px rgba(0,0,0,0.15)",
+              borderRadius: "4px",
+            }}
+          >
+            <Template cv={cv} />
+          </div>
+        </div>
       </div>
-      <div
-        ref={previewRef}
-        className="shadow-md"
-        data-preview
-        style={{ transform: "scale(0.75)", transformOrigin: "top center" }}
-      >
-        <Template cv={cv} />
-      </div>
-    </div>
+    </>
   );
 }

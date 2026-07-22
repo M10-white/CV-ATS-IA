@@ -95,6 +95,16 @@
   }
 }
 
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
 @media print {
   body { background: white !important; }
   header, aside, nav, .no-print { display: none !important; }
