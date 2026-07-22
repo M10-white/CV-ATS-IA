@@ -1,16 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useCVStore } from "../stores/cvStore";
+import { useSettingsStore } from "../stores/settingsStore";
 import { Button } from "./ui";
-
-const TEMPLATE_LABELS: Record<string, string> = {
-  classic: "Classique",
-  modern: "Moderne",
-  minimal: "Minimaliste",
-  executive: "Executive",
-  creative: "Créatif",
-  compact: "Compact",
-};
 
 function parseTextToCV(text: string): {
   profile: { firstName: string; lastName: string; email: string; phone: string; summary: string };
@@ -58,6 +50,7 @@ function parseTextToCV(text: string): {
 
 export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
   const { t } = useTranslation();
+  const language = useSettingsStore((s) => s.language);
   const cvList = useCVStore((s) => s.cvList);
   const selectCV = useCVStore((s) => s.selectCV);
   const deleteCV = useCVStore((s) => s.deleteCV);
@@ -68,6 +61,11 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
   const updateProfile = useCVStore((s) => s.updateProfile);
   const [showPasteModal, setShowPasteModal] = useState(false);
   const [pasteText, setPasteText] = useState("");
+
+  const TEMPLATE_LABELS: Record<string, string> =
+    language === "en"
+      ? { classic: "Classic", modern: "Modern", minimal: "Minimal", executive: "Executive", creative: "Creative", compact: "Compact" }
+      : { classic: "Classique", modern: "Moderne", minimal: "Minimaliste", executive: "Executive", creative: "Créatif", compact: "Compact" };
 
   const handleImport = () => {
     const input = document.createElement("input");
@@ -121,6 +119,8 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
     URL.revokeObjectURL(url);
   };
 
+  const dateLocale = language === "en" ? "en-US" : "fr-FR";
+
   return (
     <div className="flex flex-col items-center min-h-screen p-8">
       <div className="w-full max-w-2xl mt-[12vh]">
@@ -134,7 +134,7 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
             {t("home.newCv")}
           </Button>
           <Button variant="secondary" size="lg" onClick={handleImport} className="rounded-xl">
-            Importer (JSON/TXT)
+            {t("home.importFile")}
           </Button>
           <Button
             variant="secondary"
@@ -142,21 +142,21 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
             onClick={() => setShowPasteModal(true)}
             className="rounded-xl"
           >
-            Coller un CV
+            {t("home.pasteCV")}
           </Button>
         </div>
 
         {cvList.length > 0 && (
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted mb-4 px-1">
-              Tes CV
+              {t("home.yourCVs")}
             </p>
             <div className="flex flex-col gap-3">
               {cvList.map((cv) => {
                 const name =
                   cv.profile.firstName || cv.profile.lastName
                     ? `${cv.profile.firstName} ${cv.profile.lastName}`.trim()
-                    : "CV sans nom";
+                    : t("home.unnamed");
                 const initials =
                   (cv.profile.firstName?.[0] ?? "") + (cv.profile.lastName?.[0] ?? "");
                 return (
@@ -176,8 +176,8 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-ink truncate">{name}</p>
                       <p className="text-xs text-ink-muted mt-0.5">
-                        {TEMPLATE_LABELS[cv.meta.template] ?? cv.meta.template} · Modifié le{" "}
-                        {new Date(cv.meta.modified).toLocaleDateString("fr-FR")}
+                        {TEMPLATE_LABELS[cv.meta.template] ?? cv.meta.template} · {t("home.modifiedOn")}{" "}
+                        {new Date(cv.meta.modified).toLocaleDateString(dateLocale)}
                       </p>
                     </div>
                     <div
@@ -190,7 +190,7 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
                         onClick={() => handleExport(cv.meta.id, name)}
                         className="text-xs text-ink-muted hover:text-ink px-2.5 py-1.5 rounded-lg hover:bg-surface transition-colors"
                       >
-                        Exporter
+                        {t("actions.export")}
                       </button>
                       <button
                         type="button"
@@ -200,16 +200,16 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
                         }}
                         className="text-xs text-ink-muted hover:text-ink px-2.5 py-1.5 rounded-lg hover:bg-surface transition-colors"
                       >
-                        Dupliquer
+                        {t("actions.duplicate")}
                       </button>
                       <button
                         type="button"
                         onClick={() => {
-                          if (confirm(`Supprimer "${name}" ?`)) deleteCV(cv.meta.id);
+                          if (confirm(t("home.deleteConfirm", { name }))) deleteCV(cv.meta.id);
                         }}
                         className="text-xs text-danger hover:text-danger/80 px-2.5 py-1.5 rounded-lg hover:bg-danger-dim transition-colors"
                       >
-                        Supprimer
+                        {t("actions.delete")}
                       </button>
                     </div>
                   </div>
@@ -225,7 +225,7 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
               <span className="text-2xl text-accent">+</span>
             </div>
             <p className="text-sm text-ink-muted">{t("home.noCvs")}</p>
-            <p className="text-xs text-ink-muted mt-1">Crée ton premier CV en un clic</p>
+            <p className="text-xs text-ink-muted mt-1">{t("home.firstCVHint")}</p>
           </div>
         )}
       </div>
@@ -233,16 +233,11 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
       {showPasteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="bg-raised border border-border rounded-2xl shadow-xl w-full max-w-lg p-6">
-            <h2 className="text-lg font-semibold text-ink mb-2">Coller le contenu d'un CV</h2>
-            <p className="text-xs text-ink-muted mb-4">
-              Colle ici le texte de ton CV — nom, email, téléphone, résumé. On extraira les infos
-              automatiquement.
-            </p>
+            <h2 className="text-lg font-semibold text-ink mb-2">{t("home.pasteTitle")}</h2>
+            <p className="text-xs text-ink-muted mb-4">{t("home.pasteHint")}</p>
             <textarea
               className="w-full h-48 p-3 rounded-xl border border-border bg-paper text-sm text-ink resize-none focus:outline-none focus:ring-2 focus:ring-accent/20"
-              placeholder={
-                "Jean Dupont\njean@email.com\n+33 6 12 34 56 78\nDéveloppeur web avec 5 ans d'expérience..."
-              }
+              placeholder={t("home.pastePlaceholder")}
               value={pasteText}
               onChange={(e) => setPasteText(e.target.value)}
               autoFocus
@@ -255,10 +250,10 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
                   setPasteText("");
                 }}
               >
-                Annuler
+                {t("actions.cancel")}
               </Button>
               <Button onClick={handlePasteImport} disabled={!pasteText.trim()}>
-                Importer
+                {t("actions.import")}
               </Button>
             </div>
           </div>

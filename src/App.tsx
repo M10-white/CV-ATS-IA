@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { HomeScreen } from "./components/HomeScreen";
 import { KeyboardShortcuts } from "./components/KeyboardShortcuts";
@@ -8,19 +9,29 @@ import { SectionEditor } from "./features/editor/SectionEditor";
 import { SectionNav } from "./features/editor/SectionNav";
 import { CVPreview } from "./features/preview/CVPreview";
 import { useCVStore } from "./stores/cvStore";
+import { useSettingsStore } from "./stores/settingsStore";
 
 export function App() {
+  const { i18n } = useTranslation();
+  const storedLang = useSettingsStore((s) => s.language);
   const currentCVId = useCVStore((s) => s.currentCVId);
   const cv = useCVStore((s) => s.getCurrentCV());
   const createCV = useCVStore((s) => s.createCV);
   const selectCV = useCVStore((s) => s.selectCV);
+
+  useEffect(() => {
+    if (i18n.language !== storedLang) {
+      i18n.changeLanguage(storedLang);
+    }
+  }, [i18n, storedLang]);
 
   if (!currentCVId || !cv) {
     return (
       <div className="relative">
         <MotivationalBackground />
         <UpdateChecker />
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+          <LanguageSelector />
           <ThemeToggle />
         </div>
         <HomeScreen onNewCV={createCV} />
@@ -33,6 +44,26 @@ export function App() {
       <KeyboardShortcuts />
       <EditorLayout cv={cv} onBack={() => selectCV(null)} />
     </>
+  );
+}
+
+function LanguageSelector() {
+  const { i18n } = useTranslation();
+  const setLanguage = useSettingsStore((s) => s.setLanguage);
+  const current = i18n.resolvedLanguage ?? i18n.language;
+  const toggle = () => {
+    const next = current === "fr" ? "en" : "fr";
+    setLanguage(next);
+    i18n.changeLanguage(next);
+  };
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      className="text-xs font-medium text-ink-muted hover:text-ink bg-border-light hover:bg-border px-2 py-1 rounded-md transition-colors uppercase tracking-wide"
+    >
+      {current === "fr" ? "EN" : "FR"}
+    </button>
   );
 }
 
@@ -59,7 +90,7 @@ function EditorLayout({
             onClick={onBack}
             className="text-sm text-ink-muted hover:text-ink transition-colors px-2.5 py-1.5 rounded-lg hover:bg-border-light"
           >
-            &larr; Accueil
+            &larr; {t("home.title")}
           </button>
           <div className="w-px h-5 bg-border" />
           <div className="flex items-center gap-2.5">
@@ -70,6 +101,7 @@ function EditorLayout({
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <LanguageSelector />
           <ThemeToggle />
         </div>
       </header>

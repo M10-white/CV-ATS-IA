@@ -15,7 +15,17 @@
     "newCv": "Nouveau CV",
     "openCv": "Ouvrir un CV existant",
     "recentCvs": "CV récents",
-    "noCvs": "Aucun CV pour le moment"
+    "noCvs": "Aucun CV pour le moment",
+    "importFile": "Importer (JSON/TXT)",
+    "pasteCV": "Coller un CV",
+    "yourCVs": "Tes CV",
+    "unnamed": "CV sans nom",
+    "modifiedOn": "Modifié le",
+    "firstCVHint": "Crée ton premier CV en un clic",
+    "pasteTitle": "Coller le contenu d'un CV",
+    "pasteHint": "Colle ici le texte de ton CV — nom, email, téléphone, résumé. On extraira les infos automatiquement.",
+    "pastePlaceholder": "Jean Dupont\njean@email.com\n+33 6 12 34 56 78\nDéveloppeur web avec 5 ans d'expérience...",
+    "deleteConfirm": "Supprimer \"{{name}}\" ?"
   },
   "editor": {
     "sections": "Sections",

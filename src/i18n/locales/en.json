@@ -1,0 +1,149 @@
+{
+  "app": {
+    "name": "Skibidi Melyha 67",
+    "tagline": "#JobSearch"
+  },
+  "nav": {
+    "newCv": "New CV",
+    "openCv": "Open CV",
+    "settings": "Settings",
+    "export": "Export PDF"
+  },
+  "home": {
+    "title": "Welcome",
+    "subtitle": "Create a professional ATS-optimized resume",
+    "newCv": "New CV",
+    "openCv": "Open an existing CV",
+    "recentCvs": "Recent CVs",
+    "noCvs": "No CVs yet",
+    "importFile": "Import (JSON/TXT)",
+    "pasteCV": "Paste a CV",
+    "yourCVs": "Your CVs",
+    "unnamed": "Untitled CV",
+    "modifiedOn": "Modified on",
+    "firstCVHint": "Create your first CV in one click",
+    "pasteTitle": "Paste CV content",
+    "pasteHint": "Paste your CV text here — name, email, phone, summary. We'll extract the info automatically.",
+    "pastePlaceholder": "John Doe\njohn@email.com\n+1 555 123 4567\nWeb developer with 5 years of experience...",
+    "deleteConfirm": "Delete \"{{name}}\"?"
+  },
+  "editor": {
+    "sections": "Sections",
+    "addSection": "Add a section",
+    "section": {
+      "profile": {
+        "title": "Profile",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "jobTitle": "Job title",
+        "email": "Email",
+        "phone": "Phone",
+        "location": "Location",
+        "summary": "Professional summary",
+        "linkedin": "LinkedIn",
+        "website": "Website"
+      },
+      "experience": {
+        "title": "Work experience",
+        "company": "Company",
+        "position": "Position",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "current": "Current position",
+        "description": "Description",
+        "addItem": "Add experience"
+      },
+      "education": {
+        "title": "Education",
+        "institution": "Institution",
+        "degree": "Degree",
+        "field": "Field of study",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "description": "Description",
+        "addItem": "Add education"
+      },
+      "skills": {
+        "title": "Skills",
+        "category": "Category",
+        "items": "Skills",
+        "addCategory": "Add a category"
+      },
+      "languages": {
+        "title": "Languages",
+        "language": "Language",
+        "level": "Level",
+        "addItem": "Add a language"
+      },
+      "projects": {
+        "title": "Projects",
+        "name": "Project name",
+        "role": "Role",
+        "url": "Link",
+        "addItem": "Add a project"
+      },
+      "certifications": {
+        "title": "Certifications",
+        "name": "Certification",
+        "issuer": "Issuing organization",
+        "date": "Date obtained",
+        "url": "Verification link",
+        "addItem": "Add a certification"
+      },
+      "volunteering": {
+        "title": "Volunteering",
+        "organization": "Organization",
+        "role": "Role",
+        "addItem": "Add an experience"
+      },
+      "custom": {
+        "title": "Custom section",
+        "sectionTitle": "Section title",
+        "content": "Content"
+      }
+    }
+  },
+  "ats": {
+    "score": "ATS Score",
+    "diagnostic": "Diagnostic",
+    "readability": "Readability",
+    "structure": "Structure",
+    "extraction": "Extraction",
+    "content": "Content",
+    "alerts": "Alerts",
+    "critical": "Critical",
+    "warning": "Warning",
+    "suggestion": "Suggestion",
+    "parserView": "Parser view",
+    "noAlerts": "No alerts"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "ai": "Artificial intelligence",
+    "aiProvider": "Provider",
+    "aiModel": "Model",
+    "aiStatus": "Status",
+    "aiConnected": "Connected",
+    "aiDisconnected": "Disconnected",
+    "aiNone": "None"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "duplicate": "Duplicate",
+    "rename": "Rename",
+    "export": "Export",
+    "import": "Import",
+    "close": "Close",
+    "confirm": "Confirm"
+  },
+  "theme": {
+    "toggle": "Toggle theme"
+  }
+}
