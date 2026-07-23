@@ -89,7 +89,7 @@ export function AISuggestionsPanel() {
       {showConfig && (
         <div className="rounded-md border border-border-light bg-raised p-4 flex flex-col gap-3">
           <p className="text-xs text-ink-muted">
-            Optionnel — Sans configuration, des suggestions basiques sont générées localement.
+            Optionnel. Sans configuration, des suggestions basiques sont générées localement.
           </p>
           <div className="flex flex-col gap-2">
             <label className="text-xs font-medium text-ink-secondary">

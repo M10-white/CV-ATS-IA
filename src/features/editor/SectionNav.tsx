@@ -14,7 +14,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useCVStore } from "../../stores/cvStore";
 import type { SectionType } from "../../types/cv";
@@ -31,24 +31,40 @@ const SECTION_LABELS: Record<string, string> = {
   custom: "editor.section.custom.title",
 };
 
-const SECTION_ICONS: Record<string, string> = {
-  profile: "👤",
-  experience: "💼",
-  education: "🎓",
-  skills: "⚡",
-  languages: "🌍",
-  projects: "🚀",
-  certifications: "🏅",
-  volunteering: "💜",
-  custom: "✏️",
+function Icon({ d, size = 16 }: { d: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d={d} />
+    </svg>
+  );
+}
+
+function IconMulti({ children, size = 16 }: { children: ReactNode; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      {children}
+    </svg>
+  );
+}
+
+const SECTION_ICONS: Record<string, ReactNode> = {
+  profile: <IconMulti><circle cx="12" cy="8" r="4" /><path d="M4 21v-1a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v1" /></IconMulti>,
+  experience: <IconMulti><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></IconMulti>,
+  education: <IconMulti><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c0 2 6 3 6 3s6-1 6-3v-5" /></IconMulti>,
+  skills: <IconMulti><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></IconMulti>,
+  languages: <Icon d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z" />,
+  projects: <IconMulti><path d="M3 3h7l2 2h9v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3z" /></IconMulti>,
+  certifications: <IconMulti><circle cx="12" cy="9" r="6" /><path d="M8.5 15.5L7 22l5-3 5 3-1.5-6.5" /></IconMulti>,
+  volunteering: <IconMulti><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" /></IconMulti>,
+  custom: <Icon d="M4 6h16M4 12h16M4 18h16" />,
 };
 
-const TOOL_ICONS: Record<string, string> = {
-  history: "⏱",
-  "ai-suggestions": "✨",
-  customization: "🎨",
-  ats: "📊",
-  "job-match": "🎯",
+const TOOL_ICONS: Record<string, ReactNode> = {
+  history: <IconMulti><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></IconMulti>,
+  "ai-suggestions": <IconMulti><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93" /><path d="M8.24 9.93A4 4 0 0 1 12 2" /><path d="M12 22v-4" /><path d="M9 18h6" /><circle cx="12" cy="14" r="2" /></IconMulti>,
+  customization: <IconMulti><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1.08 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1.08z" /></IconMulti>,
+  ats: <IconMulti><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></IconMulti>,
+  "job-match": <IconMulti><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></IconMulti>,
 };
 
 const TOOL_LABELS: Record<string, string> = {
@@ -73,7 +89,7 @@ function NavButton({
   dimmed,
   trailing,
 }: {
-  icon: string;
+  icon: ReactNode;
   label: string;
   isActive: boolean;
   onClick: () => void;
@@ -158,7 +174,7 @@ function SortableItem({
       </span>
       <div className="flex-1">
         <NavButton
-          icon={SECTION_ICONS[type] ?? "📄"}
+          icon={SECTION_ICONS[type] ?? "?"}
           label={t(SECTION_LABELS[type] ?? type)}
           isActive={isActive}
           onClick={onSelect}
@@ -280,7 +296,7 @@ export function SectionNav() {
                     onMouseEnter={(e) => { (e.target as HTMLElement).style.background = "var(--color-border-light)"; }}
                     onMouseLeave={(e) => { (e.target as HTMLElement).style.background = "transparent"; }}
                   >
-                    <span className="text-sm">{SECTION_ICONS[s.type] ?? "📄"}</span>
+                    <span className="text-sm">{SECTION_ICONS[s.type] ?? <Icon d="M4 6h16M4 12h16M4 18h16" />}</span>
                     {s.label}
                   </button>
                 ))}

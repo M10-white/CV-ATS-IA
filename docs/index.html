@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Skibidi Melyha 67 — Crée ton CV parfait</title>
+<title>Cevory | Crée ton CV parfait</title>
 <meta name="description" content="Application gratuite pour créer des CV professionnels optimisés ATS. Télécharge maintenant.">
 <style>
 @font-face {
@@ -153,11 +153,8 @@ nav {
 .hero-logo {
   width: 120px;
   height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--accent-dim);
-  box-shadow: 0 0 0 8px var(--accent-glow), 0 20px 60px var(--accent-glow);
   margin-bottom: 32px;
+  border-radius: 50%;
 }
 .hero h1 {
   font-size: clamp(36px, 6vw, 56px);
@@ -263,71 +260,136 @@ nav {
 .preview-dot:nth-child(1) { background: #f87171; }
 .preview-dot:nth-child(2) { background: #fbbf24; }
 .preview-dot:nth-child(3) { background: #34d399; }
+.preview-bar-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  margin-left: 8px;
+}
 .preview-body {
   display: grid;
-  grid-template-columns: 160px 1fr 240px;
-  min-height: 340px;
+  grid-template-columns: 48px 1fr 220px;
+  min-height: 380px;
 }
-.preview-nav {
+.preview-sidebar {
   border-right: 1px solid var(--border);
-  padding: 16px 12px;
+  padding: 10px 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 2px;
 }
-.preview-nav-item {
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 11px;
-  color: var(--ink-soft);
+.sidebar-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-muted);
+  transition: all 0.15s;
+  cursor: default;
 }
-.preview-nav-item.active {
+.sidebar-icon.active {
   background: var(--accent-dim);
   color: var(--accent);
-  font-weight: 600;
+}
+.sidebar-icon.ats-icon {
+  color: var(--accent);
+}
+.sidebar-divider {
+  width: 24px;
+  height: 1px;
+  background: var(--border);
+  margin: 6px 0;
 }
 .preview-main {
   padding: 24px;
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  background: var(--bg-sub);
 }
 .preview-cv {
-  width: 200px;
+  width: 240px;
   background: white;
   border-radius: 4px;
-  padding: 16px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 18px 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
   border: 1px solid #eee;
 }
+.preview-cv .cv-header { margin-bottom: 10px; }
 .preview-cv .cv-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #1a1a1a;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 .preview-cv .cv-title {
   font-size: 9px;
   color: var(--accent);
-  margin-bottom: 10px;
+  font-weight: 500;
+  margin-bottom: 3px;
 }
+.preview-cv .cv-contact {
+  font-size: 7px;
+  color: #999;
+}
+.cv-section { margin-bottom: 6px; }
 .cv-line {
   height: 4px;
   border-radius: 2px;
   background: #eee;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
-.cv-line.accent { background: var(--accent); opacity: 0.3; width: 50%; margin-top: 8px; margin-bottom: 6px; }
+.cv-line.accent { background: var(--accent); opacity: 0.3; width: 40%; margin-bottom: 5px; height: 5px; }
 .cv-line.w90 { width: 90%; }
-.cv-line.w75 { width: 75%; }
-.cv-line.w60 { width: 60%; }
+.cv-line.w85 { width: 85%; }
 .cv-line.w80 { width: 80%; }
+.cv-line.w75 { width: 75%; }
+.cv-line.w70 { width: 70%; }
+.cv-line.w60 { width: 60%; }
+.cv-line.w50 { width: 50%; }
+.cv-line.w30 { width: 30%; }
+.cv-entry { margin-bottom: 6px; }
+.cv-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3px;
+}
+.cv-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.cv-tag {
+  display: inline-block;
+  width: 40px;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--accent-dim);
+  border: 1px solid color-mix(in srgb, var(--accent), transparent 80%);
+}
+.cv-tag.short { width: 28px; }
 .preview-editor {
   border-left: 1px solid var(--border);
-  padding: 16px;
+  padding: 14px 16px;
+  overflow: hidden;
+}
+.editor-section-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 .preview-field {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 .preview-field label {
   display: block;
@@ -349,10 +411,18 @@ nav {
   display: flex;
   align-items: center;
 }
+.preview-field .input-fake.textarea {
+  height: 40px;
+  align-items: flex-start;
+  padding-top: 6px;
+  font-size: 10px;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
 
 @media (max-width: 768px) {
   .preview-body { grid-template-columns: 1fr; }
-  .preview-nav, .preview-editor { display: none; }
+  .preview-sidebar, .preview-editor { display: none; }
 }
 
 /* ---- Features ---- */
@@ -459,7 +529,7 @@ footer a { color: var(--accent); text-decoration: none; }
 
 <div class="container">
   <nav>
-    <div class="nav-brand">Skibidi <span>Melyha</span> 67</div>
+    <div class="nav-brand">Ce<span>vory</span></div>
     <div class="nav-links">
       <a href="#features">Fonctionnalités</a>
       <a href="https://github.com/M10-white/CV-ATS-IA" target="_blank" rel="noopener">GitHub</a>
@@ -468,7 +538,18 @@ footer a { color: var(--accent); text-decoration: none; }
   </nav>
 
   <section class="hero">
-    <img src="logo.png" alt="" class="hero-logo">
+    <svg class="hero-logo" width="120" height="120" viewBox="0 0 100 100" fill="none" role="img" aria-label="Cevory" style="border:none;box-shadow:0 0 0 8px var(--accent-glow), 0 20px 60px var(--accent-glow);">
+      <circle cx="50" cy="50" r="48" stroke="var(--accent)" stroke-width="2" opacity="0.3"/>
+      <circle cx="50" cy="50" r="42" stroke="var(--accent)" stroke-width="1.5" opacity="0.15"/>
+      <rect x="30" y="22" width="34" height="44" rx="3" stroke="var(--accent)" stroke-width="2.5"/>
+      <path d="M52 22 L52 30 L64 30" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="36" y1="38" x2="52" y2="38" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      <line x1="36" y1="44" x2="58" y2="44" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+      <line x1="36" y1="50" x2="54" y2="50" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+      <line x1="36" y1="56" x2="48" y2="56" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+      <circle cx="62" cy="62" r="14" fill="var(--accent)"/>
+      <path d="M57 62 L60.5 65.5 L67 58" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
     <div class="tagline">#RechercheD'Emploi</div>
     <h1>Crée ton <span class="highlight">CV parfait</span> en quelques clics</h1>
     <p>Une application gratuite et privée pour construire des CV professionnels qui passent les filtres ATS. Tout reste sur ta machine.</p>
@@ -491,34 +572,85 @@ footer a { color: var(--accent); text-decoration: none; }
         <span class="preview-dot"></span>
         <span class="preview-dot"></span>
         <span class="preview-dot"></span>
+        <span class="preview-bar-title">Cevory</span>
       </div>
       <div class="preview-body">
-        <div class="preview-nav">
-          <div class="preview-nav-item active">Identité</div>
-          <div class="preview-nav-item">Expérience</div>
-          <div class="preview-nav-item">Formation</div>
-          <div class="preview-nav-item">Compétences</div>
-          <div class="preview-nav-item">Langues</div>
-          <div class="preview-nav-item" style="margin-top: auto; color: var(--accent);">Analyse ATS</div>
+        <div class="preview-sidebar">
+          <div class="sidebar-icon active" title="Profil">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="sidebar-icon" title="Expérience">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+          </div>
+          <div class="sidebar-icon" title="Formation">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1 4 3 6 3s6-2 6-3v-5"/></svg>
+          </div>
+          <div class="sidebar-icon" title="Compétences">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="sidebar-icon" title="Langues">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div class="sidebar-divider"></div>
+          <div class="sidebar-icon" title="Personnalisation">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1.08z"/></svg>
+          </div>
+          <div class="sidebar-icon ats-icon" title="Analyse ATS">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
         </div>
         <div class="preview-main">
           <div class="preview-cv">
-            <div class="cv-name">Marie Dupont</div>
-            <div class="cv-title">Développeuse Full-Stack</div>
-            <div class="cv-line accent"></div>
-            <div class="cv-line w90"></div>
-            <div class="cv-line w75"></div>
-            <div class="cv-line w80"></div>
-            <div class="cv-line accent"></div>
-            <div class="cv-line w90"></div>
-            <div class="cv-line w60"></div>
-            <div class="cv-line w75"></div>
-            <div class="cv-line accent"></div>
-            <div class="cv-line w80"></div>
-            <div class="cv-line w60"></div>
+            <div class="cv-header">
+              <div class="cv-name">Marie Dupont</div>
+              <div class="cv-title">Développeuse Full-Stack</div>
+              <div class="cv-contact">marie@email.com · +33 6 12 34 56 78 · Paris</div>
+            </div>
+            <div class="cv-section">
+              <div class="cv-line accent"></div>
+              <div class="cv-line w90"></div>
+              <div class="cv-line w75"></div>
+            </div>
+            <div class="cv-section">
+              <div class="cv-line accent"></div>
+              <div class="cv-entry">
+                <div class="cv-entry-header">
+                  <div class="cv-line w60" style="margin:0"></div>
+                  <div class="cv-line w30" style="margin:0;opacity:0.4"></div>
+                </div>
+                <div class="cv-line w90"></div>
+                <div class="cv-line w80"></div>
+              </div>
+              <div class="cv-entry">
+                <div class="cv-entry-header">
+                  <div class="cv-line w50" style="margin:0"></div>
+                  <div class="cv-line w30" style="margin:0;opacity:0.4"></div>
+                </div>
+                <div class="cv-line w85"></div>
+                <div class="cv-line w70"></div>
+              </div>
+            </div>
+            <div class="cv-section">
+              <div class="cv-line accent"></div>
+              <div class="cv-entry-header">
+                <div class="cv-line w50" style="margin:0"></div>
+                <div class="cv-line w30" style="margin:0;opacity:0.4"></div>
+              </div>
+              <div class="cv-line w75"></div>
+            </div>
+            <div class="cv-section">
+              <div class="cv-line accent"></div>
+              <div class="cv-skills">
+                <span class="cv-tag"></span><span class="cv-tag"></span><span class="cv-tag"></span><span class="cv-tag"></span><span class="cv-tag short"></span>
+              </div>
+            </div>
           </div>
         </div>
         <div class="preview-editor">
+          <div class="editor-section-title">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Profil
+          </div>
           <div class="preview-field">
             <label>Prénom</label>
             <div class="input-fake">Marie</div>
@@ -528,7 +660,7 @@ footer a { color: var(--accent); text-decoration: none; }
             <div class="input-fake">Dupont</div>
           </div>
           <div class="preview-field">
-            <label>Titre</label>
+            <label>Poste</label>
             <div class="input-fake">Développeuse Full-Stack</div>
           </div>
           <div class="preview-field">
@@ -539,6 +671,14 @@ footer a { color: var(--accent); text-decoration: none; }
             <label>Téléphone</label>
             <div class="input-fake">+33 6 12 34 56 78</div>
           </div>
+          <div class="preview-field">
+            <label>Ville</label>
+            <div class="input-fake">Paris, France</div>
+          </div>
+          <div class="preview-field full">
+            <label>Résumé</label>
+            <div class="input-fake textarea">Développeuse passionnée avec 5 ans d'expérience...</div>
+          </div>
         </div>
       </div>
     </div>
@@ -548,41 +688,41 @@ footer a { color: var(--accent); text-decoration: none; }
     <h2 class="features-title">Tout ce qu'il te faut</h2>
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon">&#x1f3af;</div>
+        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
         <h3>Score ATS</h3>
-        <p>Analyse ton CV en temps réel et optimise-le pour passer les filtres automatiques des recruteurs.</p>
+        <p>Analyse ton CV en temps reel et optimise-le pour passer les filtres automatiques des recruteurs.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">&#x1f3a8;</div>
-        <h3>6 templates</h3>
-        <p>Classique, Moderne, Minimaliste, Executive, Créatif, Compact. Change en un clic.</p>
+        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <h3>Plusieurs modeles</h3>
+        <p>Classique, Moderne, Creatif et bien d'autres. Change de design en un clic.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">&#x1f512;</div>
-        <h3>100% privé</h3>
-        <p>Tes données restent sur ta machine. Aucun compte, aucun cloud, aucune inscription.</p>
+        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <h3>100% prive</h3>
+        <p>Tes donnees restent sur ta machine. Aucun compte, aucun cloud, aucune inscription.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">&#x2728;</div>
+        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93"/><path d="M8.24 9.93A4 4 0 0 1 12 2"/><path d="M12 22v-4"/><path d="M9 18h6"/><circle cx="12" cy="14" r="2"/></svg></div>
         <h3>Suggestions IA</h3>
-        <p>Reçois des conseils pour améliorer ton CV — fonctionne aussi sans IA, en mode local.</p>
+        <p>Recois des conseils pour ameliorer ton CV. Fonctionne aussi sans IA, en mode local.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">&#x1f4cb;</div>
+        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
         <h3>Match offre</h3>
-        <p>Colle une offre d'emploi et vois quels mots-clés correspondent à ton CV.</p>
+        <p>Colle une offre d'emploi et vois quels mots-cles correspondent a ton CV.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">&#x21a9;&#xfe0f;</div>
-        <h3>Undo/Redo</h3>
-        <p>Historique complet de tes modifications. Ctrl+Z pour revenir en arrière à tout moment.</p>
+        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <h3>Multi-export</h3>
+        <p>Exporte ton CV en PDF, Word, HTML, JSON ou texte. Un seul bouton, tous les formats.</p>
       </div>
     </div>
   </section>
 
   <section class="bottom-cta">
-    <h2>Prête à décrocher le job ?</h2>
-    <p>Télécharge Skibidi Melyha 67 et commence à créer ton CV maintenant.</p>
+    <h2>Passe au niveau superieur</h2>
+    <p>Telecharge Cevory et commence a creer ton CV maintenant.</p>
     <a href="#" class="btn btn-primary dl-link">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Télécharger gratuitement
@@ -590,7 +730,7 @@ footer a { color: var(--accent); text-decoration: none; }
   </section>
 
   <footer>
-    Fait pour Melyha &middot; <a href="https://github.com/M10-white/CV-ATS-IA">GitHub</a>
+    Cevory &middot; <a href="https://github.com/M10-white/CV-ATS-IA">GitHub</a>
   </footer>
 </div>
 

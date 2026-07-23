@@ -57,7 +57,7 @@ export function SectionEditor() {
           className="w-12 h-12 rounded-2xl flex items-center justify-center"
           style={{ background: "var(--color-accent-dim)" }}
         >
-          <span className="text-lg text-accent">✦</span>
+          <span className="text-lg text-accent font-medium">+</span>
         </div>
         <p className="text-sm text-ink-muted">Sélectionnez une section</p>
       </div>

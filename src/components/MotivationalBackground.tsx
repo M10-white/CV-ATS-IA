@@ -3,19 +3,19 @@ import { useCallback, useEffect, useRef, useState } from "react";
 const PHRASES = [
   "Tu vas y arriver !",
   "C'est toi la plus forte !",
-  "Melyha mode: ON",
+  "Mode Cevory: ON",
   "Ce job est fait pour toi",
   "Les recruteurs vont t'adorer",
   "Confiance absolue",
-  "Queen des entretiens",
+  "Boss des entretiens",
   "Ton CV va tout déchirer",
   "Inarrêtable",
   "Le monde du travail n'est pas prêt",
-  "Skibidi power activated",
-  "Boss level: Melyha",
-  "67 représente",
-  "Future employée du mois",
+  "Power level: max",
   "Main character energy",
+  "Future recrue du mois",
+  "CV parfait en vue",
+  "Unstoppable",
 ];
 
 interface Particle {

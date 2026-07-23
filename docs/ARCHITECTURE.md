@@ -48,10 +48,10 @@ Responsabilité : afficher l'interface et capturer les interactions utilisateur.
 
 ### Règles
 
-- Pas de logique métier dans les composants — elle vit dans les stores Zustand et les modules TypeScript
+- Pas de logique métier dans les composants : elle vit dans les stores Zustand et les modules TypeScript
 - Les composants sont des fonctions pures : `(props) → JSX`
 - Les effets de bord (I/O, timers) sont dans les hooks custom
-- Le routing est minimal (pas de React Router) — navigation par état dans le store
+- Le routing est minimal (pas de React Router) : navigation par état dans le store
 
 ## Couche Logique Métier
 
@@ -97,7 +97,7 @@ get_app_data_dir() → Result<string>
 
 ### Règles
 
-- Le Rust est cantonné aux opérations système — pas de logique métier
+- Le Rust est cantonné aux opérations système : pas de logique métier
 - Chaque commande Tauri est typée des deux côtés (Rust struct ↔ TypeScript interface)
 - Gestion d'erreurs systématique (`Result<T, E>` côté Rust, erreurs typées côté TypeScript)
 

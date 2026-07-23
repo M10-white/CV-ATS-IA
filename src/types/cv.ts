@@ -1,5 +1,6 @@
 export interface CVMeta {
   id: string;
+  title: string;
   version: string;
   template: string;
   profile: string;
@@ -142,6 +143,7 @@ export function createEmptyCV(id: string, profileId: string): CVData {
   return {
     meta: {
       id,
+      title: "",
       version: "1.0",
       template: "classic",
       profile: profileId,

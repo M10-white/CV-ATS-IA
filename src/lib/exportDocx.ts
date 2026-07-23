@@ -63,7 +63,7 @@ function buildExperience(items: ExperienceItem[]): Paragraph[] {
       .filter(Boolean)
       .join(" – ");
     const lines: Paragraph[] = [];
-    const title = [item.position, item.company].filter(Boolean).join(" — ");
+    const title = [item.position, item.company].filter(Boolean).join(", ");
     lines.push(dateLine(title, dateStr));
     if (item.description) lines.push(bodyText(item.description));
     return lines;
@@ -73,7 +73,7 @@ function buildExperience(items: ExperienceItem[]): Paragraph[] {
 function buildEducation(items: EducationItem[]): Paragraph[] {
   return items.flatMap((item) => {
     const dateStr = [item.startDate, item.endDate].filter(Boolean).join(" – ");
-    const title = [item.degree, item.field, item.institution].filter(Boolean).join(" — ");
+    const title = [item.degree, item.field, item.institution].filter(Boolean).join(", ");
     const lines: Paragraph[] = [dateLine(title, dateStr)];
     if (item.description) lines.push(bodyText(item.description));
     return lines;
@@ -103,7 +103,7 @@ function buildLanguages(items: LanguageItem[]): Paragraph[] {
         ...(i > 0 ? [new TextRun({ text: "  ·  ", size: 19, color: "CCCCCC" })] : []),
         new TextRun({ text: item.language, bold: true, size: 19 }),
         ...(item.level
-          ? [new TextRun({ text: ` — ${item.level}`, size: 19, color: "888888" })]
+          ? [new TextRun({ text: ` (${item.level})`, size: 19, color: "888888" })]
           : []),
       ]),
     }),
@@ -113,7 +113,7 @@ function buildLanguages(items: LanguageItem[]): Paragraph[] {
 function buildProjects(items: ProjectItem[]): Paragraph[] {
   return items.flatMap((item) => {
     const dateStr = [item.startDate, item.endDate].filter(Boolean).join(" – ");
-    const title = [item.name, item.role].filter(Boolean).join(" — ");
+    const title = [item.name, item.role].filter(Boolean).join(", ");
     const lines: Paragraph[] = [dateLine(title, dateStr)];
     if (item.url) lines.push(bodyText(item.url));
     if (item.description) lines.push(bodyText(item.description));
@@ -123,7 +123,7 @@ function buildProjects(items: ProjectItem[]): Paragraph[] {
 
 function buildCertifications(items: CertificationItem[]): Paragraph[] {
   return items.flatMap((item) => {
-    const title = [item.name, item.issuer].filter(Boolean).join(" — ");
+    const title = [item.name, item.issuer].filter(Boolean).join(", ");
     const lines: Paragraph[] = [dateLine(title, item.date)];
     if (item.url) lines.push(bodyText(item.url));
     return lines;
@@ -135,7 +135,7 @@ function buildVolunteering(items: VolunteerItem[]): Paragraph[] {
     const dateStr = [item.startDate, item.current ? "Présent" : item.endDate]
       .filter(Boolean)
       .join(" – ");
-    const title = [item.role, item.organization].filter(Boolean).join(" — ");
+    const title = [item.role, item.organization].filter(Boolean).join(", ");
     const lines: Paragraph[] = [dateLine(title, dateStr)];
     if (item.description) lines.push(bodyText(item.description));
     return lines;

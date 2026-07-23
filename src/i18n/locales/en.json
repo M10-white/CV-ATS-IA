@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "CV-ATS-IA",
+    "name": "Cevory",
     "tagline": "#JobSearch"
   },
   "nav": {
@@ -16,15 +16,11 @@
     "openCv": "Open an existing CV",
     "recentCvs": "Recent CVs",
     "noCvs": "No CVs yet",
-    "importFile": "Import (JSON/TXT)",
-    "pasteCV": "Paste a CV",
+    "importFile": "Import CV",
     "yourCVs": "Your CVs",
     "unnamed": "Untitled CV",
     "modifiedOn": "Modified on",
     "firstCVHint": "Create your first CV in one click",
-    "pasteTitle": "Paste CV content",
-    "pasteHint": "Paste your CV text here — name, email, phone, summary. We'll extract the info automatically.",
-    "pastePlaceholder": "John Doe\njohn@email.com\n+1 555 123 4567\nWeb developer with 5 years of experience...",
     "deleteConfirm": "Delete \"{{name}}\"?"
   },
   "editor": {
@@ -147,7 +143,7 @@
   },
   "about": {
     "description": "Free app to create professional ATS-optimized resumes. Your data stays on your machine.",
-    "madeFor": "Made with love for Melyha 💖"
+    "madeFor": "Crafted with passion"
   },
   "theme": {
     "toggle": "Toggle theme"

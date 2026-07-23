@@ -85,7 +85,7 @@ function PhotoUpload({ photo, onUpload, onRemove }: { photo: string; onUpload: (
           transform: dragOver ? "scale(1.1) rotate(-5deg)" : "scale(1)",
         }}
       >
-        <span className="text-2xl">📷</span>
+        <span className="text-xl font-medium text-ink-muted">+</span>
       </div>
       <p className="text-xs font-medium text-ink-muted">
         {t("editor.section.profile.addPhoto")}
@@ -127,7 +127,7 @@ export function ProfileEditor() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center gap-2">
-        <span className="text-lg">👤</span>
+        <span className="text-sm font-bold text-accent">ID</span>
         <h3 className="text-sm font-bold text-ink">{t("editor.section.profile.title")}</h3>
       </div>
 

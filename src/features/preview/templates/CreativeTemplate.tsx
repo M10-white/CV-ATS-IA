@@ -124,7 +124,7 @@ export function CreativeTemplate({ cv }: { cv: CVData }) {
               (section.items as LanguageItem[]).map((item) => (
                 <div key={item.id} style={{ fontSize: "8.5pt", marginBottom: "3px" }}>
                   <span style={{ fontWeight: 600 }}>{item.language}</span>
-                  {item.level && <span style={{ opacity: 0.7 }}> — {item.level}</span>}
+                  {item.level && <span style={{ opacity: 0.7 }}> ({item.level})</span>}
                 </div>
               ))}
             {section.type === "certifications" &&

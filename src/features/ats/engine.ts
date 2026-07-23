@@ -296,7 +296,7 @@ function analyzeContent(cv: CVData, alerts: ATSAlert[]) {
         severity: "suggestion",
         category: "content",
         message: "Pronoms personnels détectés dans les descriptions",
-        recommendation: "Évitez « Je/Mon/Nous » — préférez un style impersonnel.",
+        recommendation: "Évitez « Je/Mon/Nous », préférez un style impersonnel.",
       });
     }
   }

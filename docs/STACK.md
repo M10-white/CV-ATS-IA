@@ -19,7 +19,7 @@ Chaque choix est argumenté. Aucune technologie n'est imposée par habitude.
 | Tests unitaires | Vitest | latest |
 | Tests E2E | Playwright | latest |
 | Lint + format | Biome | latest |
-| Licence | MIT | — |
+| Licence | MIT | : |
 
 ## Justifications détaillées
 
@@ -38,7 +38,7 @@ Chaque choix est argumenté. Aucune technologie n'est imposée par habitude.
 
 ### React 19 + TypeScript plutôt que Vue, Svelte ou Solid
 
-- **Écosystème** : le plus large. Radix, dnd-kit, react-i18next — tout existe en React.
+- **Écosystème** : le plus large. Radix, dnd-kit, react-i18next : tout existe en React.
 - **Support Tauri** : documentation officielle et exemples React, intégration mature.
 - **TypeScript** : le meilleur support de typage des trois frameworks.
 - **Recrutement futur** : si le projet grandit, React est le framework le plus connu.

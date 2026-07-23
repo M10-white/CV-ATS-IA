@@ -39,7 +39,7 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           tagName: ${{ github.ref_name }}
-          releaseName: 'CV-ATS-IA ${{ github.ref_name }}'
+          releaseName: 'Cevory ${{ github.ref_name }}'
           releaseBody: 'Nouvelle version disponible ! Télécharge le setup ci-dessous.'
           releaseDraft: false
           prerelease: false

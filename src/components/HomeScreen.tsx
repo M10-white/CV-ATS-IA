@@ -1,8 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { getVersion } from "@tauri-apps/api/app";
+import mammoth from "mammoth";
+import * as pdfjsLib from "pdfjs-dist";
+import { CevoryLogo } from "./CevoryLogo";
+import { CV_TEMPLATES } from "../data/cvTemplates";
 import { useCVStore } from "../stores/cvStore";
 import { useSettingsStore } from "../stores/settingsStore";
-import { Button } from "./ui";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.mjs",
+  import.meta.url,
+).toString();
 
 function parseTextToCV(text: string): {
   profile: { firstName: string; lastName: string; email: string; phone: string; summary: string };
@@ -205,33 +214,7 @@ function AvatarLogo() {
           opacity: 0.6,
         }}
       />
-      {/* Avatar image */}
-      <img
-        src="/logo.png"
-        alt="Melyha"
-        className="relative w-24 h-24 rounded-full object-cover"
-        style={{
-          border: "3px solid var(--color-raised)",
-          boxShadow: "0 8px 30px -8px color-mix(in srgb, var(--color-accent), transparent 40%)",
-        }}
-        onError={(e) => {
-          const el = e.target as HTMLImageElement;
-          el.style.display = "none";
-          const fallback = el.parentElement?.querySelector(".logo-fallback") as HTMLElement;
-          if (fallback) fallback.style.display = "flex";
-        }}
-      />
-      {/* Fallback if image not found */}
-      <div
-        className="logo-fallback relative w-24 h-24 rounded-full items-center justify-center hidden"
-        style={{
-          background: "linear-gradient(135deg, var(--color-accent), color-mix(in oklch, var(--color-accent), #6366f1 30%))",
-          border: "3px solid var(--color-raised)",
-          boxShadow: "0 8px 30px -8px color-mix(in srgb, var(--color-accent), transparent 40%)",
-        }}
-      >
-        <span className="text-4xl text-white font-black tracking-tighter">67</span>
-      </div>
+      <CevoryLogo size={96} className="relative" />
     </div>
   );
 }
@@ -246,10 +229,13 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
   const importCV = useCVStore((s) => s.importCV);
   const exportCV = useCVStore((s) => s.exportCV);
   const createCV = useCVStore((s) => s.createCV);
+  const createFromTemplate = useCVStore((s) => s.createFromTemplate);
   const updateProfile = useCVStore((s) => s.updateProfile);
-  const [showPasteModal, setShowPasteModal] = useState(false);
-  const [pasteText, setPasteText] = useState("");
   const [hoveredCv, setHoveredCv] = useState<string | null>(null);
+  const [appVersion, setAppVersion] = useState("0.0.0");
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+
+  useEffect(() => { getVersion().then(setAppVersion).catch(() => {}); }, []);
 
   const TEMPLATE_LABELS: Record<string, string> =
     language === "en"
@@ -259,32 +245,51 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
   const handleImport = () => {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = ".json,.txt";
+    input.accept = ".json,.txt,.docx,.pdf,.html,.htm,.rtf";
     input.onchange = async () => {
       const file = input.files?.[0];
       if (!file) return;
-      const text = await file.text();
-      if (file.name.endsWith(".json")) {
+      const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+
+      if (ext === "json") {
+        const text = await file.text();
         try {
           const data = JSON.parse(text);
           if (data.meta && data.profile && data.sections) importCV(data);
         } catch { /* invalid */ }
+      } else if (ext === "docx") {
+        const arrayBuffer = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        const parsed = parseTextToCV(result.value);
+        createCV();
+        setTimeout(() => updateProfile(parsed.profile), 50);
+      } else if (ext === "pdf") {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        const pages: string[] = [];
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          pages.push(content.items.map((item) => ("str" in item ? item.str : "")).join(" "));
+        }
+        const parsed = parseTextToCV(pages.join("\n"));
+        createCV();
+        setTimeout(() => updateProfile(parsed.profile), 50);
+      } else if (ext === "html" || ext === "htm") {
+        const text = await file.text();
+        const doc = new DOMParser().parseFromString(text, "text/html");
+        const plainText = doc.body.textContent ?? "";
+        const parsed = parseTextToCV(plainText);
+        createCV();
+        setTimeout(() => updateProfile(parsed.profile), 50);
       } else {
+        const text = await file.text();
         const parsed = parseTextToCV(text);
         createCV();
         setTimeout(() => updateProfile(parsed.profile), 50);
       }
     };
     input.click();
-  };
-
-  const handlePasteImport = () => {
-    if (!pasteText.trim()) return;
-    const parsed = parseTextToCV(pasteText);
-    createCV();
-    setTimeout(() => updateProfile(parsed.profile), 50);
-    setShowPasteModal(false);
-    setPasteText("");
   };
 
   const handleExport = (id: string, name: string) => {
@@ -309,7 +314,7 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
       <FloatingOrb style={{ width: 200, height: 200, top: "40%", right: "10%", background: "color-mix(in oklch, var(--color-accent), #6366f1)", animation: "orbFloat3 18s ease-in-out infinite" }} />
 
       <div className="relative z-10 w-full max-w-xl mt-[6vh]">
-        {/* Logo + titre — cinematic entrance */}
+        {/* Logo + titre */}
         <div className="flex flex-col items-center mb-10">
           <AvatarLogo />
 
@@ -334,28 +339,21 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
         </div>
 
         {/* Action cards with 3D tilt */}
-        <div className="grid grid-cols-3 gap-3 mb-10">
+        <div className="grid grid-cols-2 gap-3 mb-10">
           <ActionCard3D
-            icon="✦"
+            icon="+"
             label={t("home.newCv")}
-            sub={language === "en" ? "Start fresh" : "Partir de zéro"}
-            onClick={onNewCV}
+            sub={language === "en" ? "Start fresh or from template" : "Vide ou depuis un modele"}
+            onClick={() => setShowTemplateModal(true)}
             primary
             index={0}
           />
           <ActionCard3D
-            icon="📁"
+            icon="↑"
             label={t("home.importFile")}
-            sub="JSON / TXT"
+            sub="PDF, Word, TXT..."
             onClick={handleImport}
             index={1}
-          />
-          <ActionCard3D
-            icon="📋"
-            label={t("home.pasteCV")}
-            sub={language === "en" ? "Copy-paste text" : "Copier-coller"}
-            onClick={() => setShowPasteModal(true)}
-            index={2}
           />
         </div>
 
@@ -375,8 +373,9 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
             </div>
             <div className="flex flex-col gap-2">
               {cvList.map((cv, i) => {
-                const name =
-                  cv.profile.firstName || cv.profile.lastName
+                const name = cv.meta.title
+                  ? cv.meta.title
+                  : cv.profile.firstName || cv.profile.lastName
                     ? `${cv.profile.firstName} ${cv.profile.lastName}`.trim()
                     : t("home.unnamed");
                 const initials =
@@ -492,7 +491,7 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
                 animation: "pulse 3s ease-in-out infinite",
               }}
             >
-              <span className="text-2xl text-accent">✦</span>
+              <span className="text-2xl text-accent">+</span>
             </div>
             <p className="text-sm font-medium text-ink-muted">{t("home.noCvs")}</p>
             <p className="text-xs text-ink-muted/70 mt-1">{t("home.firstCVHint")}</p>
@@ -504,43 +503,106 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
           className="text-center text-[10px] text-ink-muted/50 mt-10 tracking-wide"
           style={{ animation: "taglineFade 1s ease 1.2s both" }}
         >
-          v0.2.0
+          v{appVersion}
         </p>
       </div>
 
-      {/* Paste modal */}
-      {showPasteModal && (
+      {showTemplateModal && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center"
           style={{ animation: "modalOverlay 0.3s ease both" }}
         >
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-md" onClick={() => { setShowPasteModal(false); setPasteText(""); }} />
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-md" onClick={() => setShowTemplateModal(false)} />
           <div
-            className="relative bg-raised border border-border rounded-2xl shadow-2xl w-full max-w-lg p-6"
-            style={{ animation: "modalContent 0.4s cubic-bezier(0.16, 1, 0.3, 1) both" }}
+            className="relative border rounded-2xl shadow-2xl w-full max-w-lg p-6 max-h-[80vh] overflow-y-auto"
+            style={{
+              background: "var(--color-raised)",
+              borderColor: "var(--color-border-light)",
+              animation: "modalContent 0.4s cubic-bezier(0.16, 1, 0.3, 1) both",
+            }}
           >
-            <h2 className="text-base font-bold text-ink mb-1">{t("home.pasteTitle")}</h2>
-            <p className="text-xs text-ink-muted mb-4">{t("home.pasteHint")}</p>
-            <textarea
-              className="w-full h-44 p-3 rounded-xl border border-border bg-paper text-sm text-ink resize-none focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-colors"
-              placeholder={t("home.pastePlaceholder")}
-              value={pasteText}
-              onChange={(e) => setPasteText(e.target.value)}
-              autoFocus
-            />
-            <div className="flex justify-end gap-2 mt-4">
-              <Button variant="ghost" onClick={() => { setShowPasteModal(false); setPasteText(""); }}>
-                {t("actions.cancel")}
-              </Button>
-              <Button onClick={handlePasteImport} disabled={!pasteText.trim()}>
-                {t("actions.import")}
-              </Button>
+            <h2 className="text-base font-bold text-ink mb-1">
+              {language === "en" ? "Create a new CV" : "Creer un nouveau CV"}
+            </h2>
+            <p className="text-xs text-ink-muted mb-5">
+              {language === "en" ? "Start blank or pick a template" : "CV vide ou depuis un modele pre-rempli"}
+            </p>
+
+            <button
+              type="button"
+              onClick={() => { setShowTemplateModal(false); onNewCV(); }}
+              className="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl border mb-3 transition-all duration-200 hover:border-accent"
+              style={{
+                background: "var(--color-surface)",
+                borderColor: "var(--color-border-light)",
+              }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px -4px color-mix(in srgb, var(--color-accent), transparent 70%)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}
+            >
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-white text-lg font-bold"
+                style={{ background: "linear-gradient(135deg, var(--color-accent), color-mix(in oklch, var(--color-accent), #000 20%))" }}
+              >
+                +
+              </div>
+              <div className="text-left">
+                <p className="text-sm font-semibold text-ink">
+                  {language === "en" ? "Blank CV" : "CV vide"}
+                </p>
+                <p className="text-[11px] text-ink-muted">
+                  {language === "en" ? "Start from scratch" : "Partir de zero"}
+                </p>
+              </div>
+            </button>
+
+            <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-ink-muted mb-2.5 mt-4 px-1">
+              {language === "en" ? "Templates" : "Modeles"}
+            </p>
+
+            <div className="flex flex-col gap-2">
+              {CV_TEMPLATES.map((tpl) => (
+                <button
+                  key={tpl.id}
+                  type="button"
+                  onClick={() => { setShowTemplateModal(false); createFromTemplate(tpl.data); }}
+                  className="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl border transition-all duration-200 hover:border-accent text-left"
+                  style={{
+                    background: "var(--color-surface)",
+                    borderColor: "var(--color-border-light)",
+                  }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px -4px color-mix(in srgb, var(--color-accent), transparent 70%)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-white text-xs font-bold"
+                    style={{ background: tpl.data.customization.colors.accent }}
+                  >
+                    {tpl.id[0].toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-ink">
+                      {language === "en" ? tpl.labelEn : tpl.labelFr}
+                    </p>
+                    <p className="text-[11px] text-ink-muted">
+                      {language === "en" ? tpl.descEn : tpl.descFr}
+                    </p>
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
         </div>
       )}
 
       <style>{`
+        @keyframes modalOverlay {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
+        }
+        @keyframes modalContent {
+          0% { opacity: 0; transform: scale(0.92) translateY(20px); }
+          100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
         @keyframes logoEntrance {
           0% { opacity: 0; transform: scale(0.3) rotate(-20deg); filter: blur(10px); }
           60% { transform: scale(1.08) rotate(2deg); }
@@ -603,15 +665,6 @@ export function HomeScreen({ onNewCV }: { onNewCV: () => void }) {
           50% { transform: scale(1.05); }
         }
 
-        @keyframes modalOverlay {
-          0% { opacity: 0; }
-          100% { opacity: 1; }
-        }
-
-        @keyframes modalContent {
-          0% { opacity: 0; transform: scale(0.92) translateY(20px); }
-          100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
       `}</style>
     </div>
   );

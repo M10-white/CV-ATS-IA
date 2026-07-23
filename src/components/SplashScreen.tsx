@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { CevoryLogo } from "./CevoryLogo";
 
 export function SplashScreen({ onDone }: { onDone: () => void }) {
   const [phase, setPhase] = useState(0);
@@ -96,41 +97,7 @@ export function SplashScreen({ onDone }: { onDone: () => void }) {
             transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
-          {/* Animated ring */}
-          <div
-            className="absolute -inset-3 rounded-full"
-            style={{
-              background: "conic-gradient(from 0deg, var(--color-accent), color-mix(in oklch, var(--color-accent), #8b5cf6), transparent, var(--color-accent))",
-              animation: phase >= 1 ? "splashRing 3s linear infinite" : "none",
-              filter: "blur(6px)",
-              opacity: 0.5,
-            }}
-          />
-          <img
-            src="/logo.png"
-            alt="Melyha"
-            className="relative w-28 h-28 rounded-full object-cover"
-            style={{
-              border: "4px solid var(--color-raised)",
-              boxShadow: "0 0 60px -10px var(--color-accent), 0 20px 40px -20px rgba(0,0,0,0.3)",
-            }}
-            onError={(e) => {
-              const el = e.target as HTMLImageElement;
-              el.style.display = "none";
-              const fb = el.parentElement?.querySelector(".splash-fb") as HTMLElement;
-              if (fb) fb.style.display = "flex";
-            }}
-          />
-          <div
-            className="splash-fb relative w-28 h-28 rounded-full items-center justify-center hidden"
-            style={{
-              background: "linear-gradient(135deg, var(--color-accent), color-mix(in oklch, var(--color-accent), #6366f1 30%))",
-              border: "4px solid var(--color-raised)",
-              boxShadow: "0 0 60px -10px var(--color-accent), 0 20px 40px -20px rgba(0,0,0,0.3)",
-            }}
-          >
-            <span className="text-5xl text-white font-black tracking-tighter">67</span>
-          </div>
+          <CevoryLogo size={112} className="relative drop-shadow-[0_0_40px_var(--color-accent)]" />
         </div>
 
         <h1
@@ -144,7 +111,7 @@ export function SplashScreen({ onDone }: { onDone: () => void }) {
             letterSpacing: "-0.03em",
           }}
         >
-          Skibidi Melyha 67
+          Cevory
         </h1>
 
         <div
@@ -164,7 +131,7 @@ export function SplashScreen({ onDone }: { onDone: () => void }) {
               WebkitTextFillColor: "transparent",
             }}
           >
-            Pour Melyha
+            Your CV, perfected
           </span>
           <div className="h-px w-8 bg-accent/40" />
         </div>

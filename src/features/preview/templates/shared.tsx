@@ -60,7 +60,7 @@ export function ExperienceBlock({ items }: { items: ExperienceItem[] }) {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <div>
               <span style={{ fontWeight: 600 }}>{item.position || "Poste"}</span>
-              {item.company && <span style={{ color: "#555" }}> — {item.company}</span>}
+              {item.company && <span style={{ color: "#555" }}>, {item.company}</span>}
             </div>
             <span style={{ fontSize: "9pt", color: "#888", whiteSpace: "nowrap" }}>
               {item.startDate}
@@ -94,7 +94,7 @@ export function EducationBlock({ items }: { items: EducationItem[] }) {
             <div>
               <span style={{ fontWeight: 600 }}>{item.degree || "Diplôme"}</span>
               {item.field && <span> en {item.field}</span>}
-              {item.institution && <span style={{ color: "#555" }}> — {item.institution}</span>}
+              {item.institution && <span style={{ color: "#555" }}>, {item.institution}</span>}
             </div>
             <span style={{ fontSize: "9pt", color: "#888", whiteSpace: "nowrap" }}>
               {item.startDate}
@@ -138,7 +138,7 @@ export function LanguagesBlock({ items }: { items: LanguageItem[] }) {
       {items.map((item) => (
         <span key={item.id} style={{ fontSize: "9.5pt" }}>
           <span style={{ fontWeight: 600 }}>{item.language}</span>
-          {item.level && <span style={{ color: "#888" }}> — {item.level}</span>}
+          {item.level && <span style={{ color: "#888" }}> ({item.level})</span>}
         </span>
       ))}
     </div>
@@ -153,7 +153,7 @@ export function ProjectsBlock({ items }: { items: ProjectItem[] }) {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <div>
               <span style={{ fontWeight: 600 }}>{item.name || "Projet"}</span>
-              {item.role && <span style={{ color: "#555" }}> — {item.role}</span>}
+              {item.role && <span style={{ color: "#555" }}>, {item.role}</span>}
             </div>
             <span style={{ fontSize: "9pt", color: "#888", whiteSpace: "nowrap" }}>
               {item.startDate}
@@ -189,7 +189,7 @@ export function CertificationsBlock({ items }: { items: CertificationItem[] }) {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <div>
               <span style={{ fontWeight: 600 }}>{item.name || "Certification"}</span>
-              {item.issuer && <span style={{ color: "#555" }}> — {item.issuer}</span>}
+              {item.issuer && <span style={{ color: "#555" }}>, {item.issuer}</span>}
             </div>
             {item.date && (
               <span style={{ fontSize: "9pt", color: "#888", whiteSpace: "nowrap" }}>
@@ -214,7 +214,7 @@ export function VolunteerBlock({ items }: { items: VolunteerItem[] }) {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <div>
               <span style={{ fontWeight: 600 }}>{item.role || "Bénévole"}</span>
-              {item.organization && <span style={{ color: "#555" }}> — {item.organization}</span>}
+              {item.organization && <span style={{ color: "#555" }}>, {item.organization}</span>}
             </div>
             <span style={{ fontSize: "9pt", color: "#888", whiteSpace: "nowrap" }}>
               {item.startDate}

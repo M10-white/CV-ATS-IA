@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { getVersion } from "@tauri-apps/api/app";
+import { CevoryLogo } from "./CevoryLogo";
 import { Button } from "./ui";
 
 function MiniParticles({ active }: { active: boolean }) {
@@ -66,6 +68,9 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
   const [entered, setEntered] = useState(false);
   const [eggClicks, setEggClicks] = useState(0);
   const [spinning, setSpinning] = useState(false);
+  const [appVersion, setAppVersion] = useState("0.0.0");
+
+  useEffect(() => { getVersion().then(setAppVersion).catch(() => {}); }, []);
 
   useEffect(() => {
     requestAnimationFrame(() => setEntered(true));
@@ -123,38 +128,7 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
               animation: spinning ? "eggSpin 1.2s cubic-bezier(0.16, 1, 0.3, 1)" : "aboutLogoPulse 3s ease-in-out infinite",
             }}
           >
-            <div
-              className="absolute -inset-1 rounded-full"
-              style={{
-                background: "conic-gradient(from 0deg, rgba(255,255,255,0.4), transparent, rgba(255,255,255,0.4))",
-                animation: "aboutRingSpin 3s linear infinite",
-              }}
-            />
-            <img
-              src="/logo.png"
-              alt="Melyha"
-              className="relative w-20 h-20 rounded-full object-cover"
-              style={{
-                border: "3px solid rgba(255,255,255,0.3)",
-                boxShadow: "0 8px 30px rgba(0,0,0,0.2)",
-              }}
-              onError={(e) => {
-                const el = e.target as HTMLImageElement;
-                el.style.display = "none";
-                const fb = el.parentElement?.querySelector(".about-fb") as HTMLElement;
-                if (fb) fb.style.display = "flex";
-              }}
-            />
-            <div
-              className="about-fb relative w-20 h-20 rounded-full items-center justify-center hidden"
-              style={{
-                background: "rgba(255,255,255,0.2)",
-                backdropFilter: "blur(10px)",
-                border: "3px solid rgba(255,255,255,0.3)",
-              }}
-            >
-              <span className="text-4xl text-white font-black tracking-tighter select-none">67</span>
-            </div>
+            <CevoryLogo size={80} className="relative drop-shadow-[0_4px_20px_rgba(0,0,0,0.2)]" />
           </div>
         </div>
 
@@ -166,7 +140,7 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
               color: "var(--color-accent-text)",
             }}
           >
-            v0.2.0
+            v{appVersion}
           </div>
 
           <h2 className="text-xl font-black text-ink mb-1">{t("app.name")}</h2>
@@ -208,7 +182,7 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
               WebkitTextFillColor: "transparent",
             }}
           >
-            {t("about.madeFor")} 💖
+            {t("about.madeFor")}
           </p>
 
           <Button variant="ghost" onClick={onClose}>

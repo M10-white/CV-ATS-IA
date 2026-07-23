@@ -2,7 +2,7 @@
 
 Chaque phase produit un logiciel fonctionnel. Pas de phase qui se termine sur un logiciel cassé.
 
-## Phase 0 — Fondation
+## Phase 0 : Fondation
 
 **Durée estimée : 2-3 semaines**
 
@@ -23,7 +23,7 @@ Setup technique complet. À la fin, l'application démarre, affiche une fenêtre
 
 ---
 
-## Phase 1 — Éditeur de CV
+## Phase 1 : Éditeur de CV
 
 **Durée estimée : 3-4 semaines**
 
@@ -42,11 +42,11 @@ L'utilisateur peut créer un CV, le remplir section par section, et le voir se c
 - [ ] Liste des CV (créer, dupliquer, supprimer, renommer)
 - [ ] Aperçu HTML temps réel (placeholder avant Typst)
 
-**Livrable** : un éditeur fonctionnel avec sauvegarde locale. L'aperçu est en HTML basique — le vrai rendu PDF arrive en Phase 2.
+**Livrable** : un éditeur fonctionnel avec sauvegarde locale. L'aperçu est en HTML basique : le vrai rendu PDF arrive en Phase 2.
 
 ---
 
-## Phase 2 — Templates et PDF
+## Phase 2 : Templates et PDF
 
 **Durée estimée : 3-4 semaines**
 
@@ -67,7 +67,7 @@ L'aperçu devient un vrai PDF. Les templates sont appliqués et personnalisables
 
 ---
 
-## Phase 3 — Moteur ATS
+## Phase 3 : Moteur ATS
 
 **Durée estimée : 2-3 semaines**
 
@@ -88,7 +88,7 @@ Le diagnostic ATS est intégré. L'utilisateur voit ses scores et les problèmes
 
 ---
 
-## Phase 4 — Profils et historique
+## Phase 4 : Profils et historique
 
 **Durée estimée : 2 semaines**
 
@@ -106,7 +106,7 @@ Gestion multi-profils et historique des modifications.
 
 ---
 
-## Phase 5 — Adaptation et comparaison
+## Phase 5 : Adaptation et comparaison
 
 **Durée estimée : 2-3 semaines**
 
@@ -124,7 +124,7 @@ L'outil aide à adapter un CV à une offre et à comparer des versions.
 
 ---
 
-## Phase 6 — Module IA
+## Phase 6 : Module IA
 
 **Durée estimée : 2-3 semaines**
 
@@ -145,7 +145,7 @@ L'IA optionnelle est intégrée pour la reformulation et les suggestions.
 
 ---
 
-## Phase 7 — Templates avancés et polish
+## Phase 7 : Templates avancés et polish
 
 **Durée estimée : 3-4 semaines**
 

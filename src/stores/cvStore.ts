@@ -26,11 +26,13 @@ interface CVState {
   getCurrentCV: () => CVData | undefined;
 
   createCV: () => string;
+  createFromTemplate: (templateData: Omit<CVData, "meta"> & { meta: Pick<CVData["meta"], "template" | "title"> }) => string;
   duplicateCV: (id: string) => string | null;
   deleteCV: (id: string) => void;
   selectCV: (id: string | null) => void;
   setActiveSection: (sectionId: string | null) => void;
 
+  updateMeta: (updates: Partial<Pick<CVData["meta"], "title">>) => void;
   updateProfile: (updates: Partial<CVProfile>) => void;
   updateCustomization: (updates: Partial<CVData["customization"]>) => void;
 
@@ -131,6 +133,32 @@ export const useCVStore = create<CVState>()(
         return id;
       },
 
+      createFromTemplate: (templateData) => {
+        const id = crypto.randomUUID();
+        const now = new Date().toISOString();
+        const cv: CVData = {
+          meta: {
+            id,
+            title: templateData.meta.title || "",
+            version: "1.0",
+            template: templateData.meta.template,
+            profile: "default",
+            created: now,
+            modified: now,
+            language: "fr",
+          },
+          profile: { ...templateData.profile },
+          sections: templateData.sections.map((s) => ({ ...s })),
+          customization: { ...templateData.customization },
+        };
+        set((state) => ({
+          cvList: [...state.cvList, cv],
+          currentCVId: id,
+          activeSectionId: null,
+        }));
+        return id;
+      },
+
       duplicateCV: (id) => {
         const source = get().cvList.find((cv) => cv.meta.id === id);
         if (!source) return null;
@@ -154,6 +182,15 @@ export const useCVStore = create<CVState>()(
       selectCV: (id) => set({ currentCVId: id, activeSectionId: null }),
 
       setActiveSection: (sectionId) => set({ activeSectionId: sectionId }),
+
+      updateMeta: (updates) => {
+        set((state) =>
+          updateCurrentCV(state, (cv) => ({
+            ...cv,
+            meta: { ...cv.meta, ...updates },
+          })),
+        );
+      },
 
       updateProfile: (updates) => {
         set((state) =>

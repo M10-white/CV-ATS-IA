@@ -10,17 +10,17 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
 - Design Document complet (vision, architecture, stack, ATS, IA, UX, roadmap)
 - Documentation du projet :
-  - `CLAUDE.md` — conventions et configuration du projet
-  - `docs/OBJECTIF.md` — problème, solution, proposition de valeur
-  - `docs/DIRECTIVES.md` — règles non négociables
-  - `docs/ARCHITECTURE.md` — architecture en couches, format de données, décisions
-  - `docs/ROADMAP.md` — 8 phases de développement détaillées
-  - `docs/ATS.md` — spécification du moteur d'analyse ATS
-  - `docs/IA.md` — architecture IA, providers, fallbacks
-  - `docs/DESIGN.md` — principes UX, layout, palette, composants
-  - `docs/STACK.md` — choix techniques argumentés
-  - `docs/TODOS.md` — tâches en cours
-  - `docs/CHANGELOG.md` — ce fichier
+  - `CLAUDE.md` : conventions et configuration du projet
+  - `docs/OBJECTIF.md` : problème, solution, proposition de valeur
+  - `docs/DIRECTIVES.md` : règles non négociables
+  - `docs/ARCHITECTURE.md` : architecture en couches, format de données, décisions
+  - `docs/ROADMAP.md` : 8 phases de développement détaillées
+  - `docs/ATS.md` : spécification du moteur d'analyse ATS
+  - `docs/IA.md` : architecture IA, providers, fallbacks
+  - `docs/DESIGN.md` : principes UX, layout, palette, composants
+  - `docs/STACK.md` : choix techniques argumentés
+  - `docs/TODOS.md` : tâches en cours
+  - `docs/CHANGELOG.md` : ce fichier
 
 ### Décidé
 

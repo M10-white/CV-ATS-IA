@@ -115,16 +115,34 @@ function TemplateThumbnail({ id, active }: { id: string; active: boolean }) {
   );
 }
 
+const CV_LANGUAGES = [
+  { code: "fr", label: "Francais" },
+  { code: "en", label: "English" },
+  { code: "es", label: "Espanol" },
+  { code: "de", label: "Deutsch" },
+  { code: "it", label: "Italiano" },
+  { code: "pt", label: "Portugues" },
+  { code: "ar", label: "العربية" },
+  { code: "zh", label: "中文" },
+];
+
 export function CustomizationPanel() {
   const cv = useCVStore((s) => s.getCurrentCV());
   const updateCustomization = useCVStore((s) => s.updateCustomization);
-
   if (!cv) return null;
 
   const setTemplate = (templateId: string) => {
     useCVStore.setState((state) => ({
       cvList: state.cvList.map((c) =>
         c.meta.id === state.currentCVId ? { ...c, meta: { ...c.meta, template: templateId } } : c,
+      ),
+    }));
+  };
+
+  const setCvLanguage = (lang: string) => {
+    useCVStore.setState((state) => ({
+      cvList: state.cvList.map((c) =>
+        c.meta.id === state.currentCVId ? { ...c, meta: { ...c.meta, language: lang } } : c,
       ),
     }));
   };
@@ -261,6 +279,28 @@ export function CustomizationPanel() {
           value={cv.customization.lineSpacing}
           onChange={(e) => updateCustomization({ lineSpacing: Number(e.target.value) })}
         />
+      </div>
+
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted mb-3">
+          Langue du CV
+        </p>
+        <div className="flex flex-wrap gap-1.5">
+          {CV_LANGUAGES.map((lang) => (
+            <button
+              key={lang.code}
+              type="button"
+              onClick={() => setCvLanguage(lang.code)}
+              className={`px-2.5 py-1 rounded-lg text-xs transition-colors ${
+                cv.meta.language === lang.code
+                  ? "bg-accent text-white"
+                  : "bg-surface text-ink-secondary hover:bg-border-light"
+              }`}
+            >
+              {lang.label}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

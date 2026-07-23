@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AboutModal } from "./components/AboutModal";
 import { ToastContainer } from "./components/Toast";
 import { HomeScreen } from "./components/HomeScreen";
 import { KeyboardShortcuts } from "./components/KeyboardShortcuts";
-import { MotivationalBackground } from "./components/MotivationalBackground";
 import { SplashScreen } from "./components/SplashScreen";
 import { UpdateChecker } from "./components/UpdateChecker";
 import { ThemeToggle } from "./components/ui";
@@ -85,7 +84,6 @@ export function App() {
         transition: "all 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
     >
-      <MotivationalBackground />
       <UpdateChecker />
       <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
         <LanguageSelector />
@@ -118,63 +116,37 @@ function LanguageSelector() {
   );
 }
 
-function CompletionRing({ percent }: { percent: number }) {
-  const r = 11;
-  const circ = 2 * Math.PI * r;
-  const offset = circ - (percent / 100) * circ;
-  const color = percent >= 80 ? "var(--color-success)" : percent >= 50 ? "var(--color-warning)" : "var(--color-accent)";
-
-  return (
-    <div className="relative flex items-center justify-center" title={`${percent}% complet`}>
-      <svg width={28} height={28} style={{ transform: "rotate(-90deg)" }}>
-        <circle cx={14} cy={14} r={r} fill="none" stroke="var(--color-border-light)" strokeWidth={2.5} />
-        <circle
-          cx={14} cy={14} r={r} fill="none"
-          stroke={color} strokeWidth={2.5} strokeLinecap="round"
-          strokeDasharray={circ} strokeDashoffset={offset}
-          style={{ transition: "stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1)" }}
-        />
-      </svg>
-      <span className="absolute text-[8px] font-bold tabular-nums" style={{ color }}>
-        {percent}
-      </span>
-    </div>
-  );
-}
-
 function EditorLayout({
   cv,
   onBack,
 }: {
-  cv: { meta: { template: string }; profile: { firstName: string; lastName: string; jobTitle?: string; email?: string; phone?: string; summary?: string }; sections?: { type: string; items?: unknown[] }[] };
+  cv: { meta: { title?: string; template: string }; profile: { firstName: string; lastName: string; jobTitle?: string; email?: string; phone?: string; summary?: string }; sections?: { type: string; items?: unknown[] }[] };
   onBack: () => void;
 }) {
   const { t } = useTranslation();
   const [showAbout, setShowAbout] = useState(false);
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [titleDraft, setTitleDraft] = useState("");
+  const updateMeta = useCVStore((s) => s.updateMeta);
+  const titleInputRef = useRef<HTMLInputElement>(null);
 
-  const displayName =
-    cv.profile.firstName || cv.profile.lastName
+  const displayName = cv.meta.title
+    ? cv.meta.title
+    : cv.profile.firstName || cv.profile.lastName
       ? `${cv.profile.firstName} ${cv.profile.lastName}`.trim()
       : t("home.newCv");
 
-  const completion = useMemo(() => {
-    let filled = 0;
-    let total = 0;
-    const check = (v: unknown) => { total++; if (v && String(v).trim()) filled++; };
-    check(cv.profile.firstName);
-    check(cv.profile.lastName);
-    check(cv.profile.jobTitle);
-    check(cv.profile.email);
-    check(cv.profile.phone);
-    check(cv.profile.summary);
-    if (cv.sections) {
-      for (const s of cv.sections) {
-        total++;
-        if (s.items && Array.isArray(s.items) && s.items.length > 0) filled++;
-      }
-    }
-    return total > 0 ? Math.round((filled / total) * 100) : 0;
-  }, [cv]);
+  const startEditing = () => {
+    setTitleDraft(cv.meta.title || "");
+    setEditingTitle(true);
+    setTimeout(() => titleInputRef.current?.focus(), 0);
+  };
+
+  const commitTitle = () => {
+    updateMeta({ title: titleDraft.trim() });
+    setEditingTitle(false);
+  };
+
 
   return (
     <div className="flex flex-col h-screen">
@@ -208,7 +180,25 @@ function EditorLayout({
                 animation: "pulse 2s ease-in-out infinite",
               }}
             />
-            <h1 className="text-sm font-semibold text-ink truncate">{displayName}</h1>
+            {editingTitle ? (
+              <input
+                ref={titleInputRef}
+                value={titleDraft}
+                onChange={(e) => setTitleDraft(e.target.value)}
+                onBlur={commitTitle}
+                onKeyDown={(e) => { if (e.key === "Enter") commitTitle(); if (e.key === "Escape") setEditingTitle(false); }}
+                className="text-sm font-semibold text-ink bg-transparent border-b-2 border-accent outline-none px-1 py-0.5 max-w-[200px]"
+                placeholder={t("home.newCv")}
+              />
+            ) : (
+              <h1
+                className="text-sm font-semibold text-ink truncate cursor-pointer hover:text-accent transition-colors"
+                onClick={startEditing}
+                title={t("actions.rename") || "Renommer"}
+              >
+                {displayName}
+              </h1>
+            )}
             <span
               className="text-[11px] px-2.5 py-0.5 rounded-full font-medium"
               style={{
@@ -218,7 +208,7 @@ function EditorLayout({
             >
               {cv.meta.template}
             </span>
-            <CompletionRing percent={completion} />
+
           </div>
         </div>
         <div className="flex items-center gap-1.5">

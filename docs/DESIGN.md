@@ -47,12 +47,12 @@ Le panneau gauche se réduit à des icônes sur les écrans < 1200px. Le panneau
 
 ### Premier CV (onboarding)
 
-1. **Accueil** — deux actions : "Nouveau CV" ou "Ouvrir un CV". Pas de tutoriel obligatoire.
-2. **Template** — grille de templates avec aperçu rempli de données réalistes. Badge "Score ATS: 95+".
-3. **Saisie** — l'éditeur s'ouvre sur la section Identité. Tooltips discrets expliquant ce qu'attend un ATS.
-4. **Remplissage** — l'utilisateur descend section par section. L'aperçu se construit en temps réel.
-5. **Diagnostic** — panneau diagnostic avec analyse complète. Problèmes cliquables.
-6. **Export** — un clic, un fichier PDF.
+1. **Accueil** : deux actions : "Nouveau CV" ou "Ouvrir un CV". Pas de tutoriel obligatoire.
+2. **Template** : grille de templates avec aperçu rempli de données réalistes. Badge "Score ATS: 95+".
+3. **Saisie** : l'éditeur s'ouvre sur la section Identité. Tooltips discrets expliquant ce qu'attend un ATS.
+4. **Remplissage** : l'utilisateur descend section par section. L'aperçu se construit en temps réel.
+5. **Diagnostic** : panneau diagnostic avec analyse complète. Problèmes cliquables.
+6. **Export** : un clic, un fichier PDF.
 
 ### Adaptation à une offre
 

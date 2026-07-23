@@ -176,7 +176,7 @@ function buildCVContext(cv: CVData): string {
       lines.push("\n--- Formation ---");
       for (const item of section.items) {
         const edu = item as { degree: string; field: string; institution: string };
-        lines.push(`${edu.degree} ${edu.field} — ${edu.institution}`);
+        lines.push(`${edu.degree} ${edu.field}, ${edu.institution}`);
       }
     }
     if (section.type === "skills") {

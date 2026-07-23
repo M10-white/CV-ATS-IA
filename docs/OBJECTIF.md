@@ -27,10 +27,10 @@ CV Architect AI est un logiciel de bureau, gratuit et entièrement hors ligne, q
 
 ## Différenciation
 
-- Pas un template picker (Canva) — l'utilisateur construit son propre système de design
-- Pas une app web déguisée — logiciel natif, léger, rapide
-- Pas un gadget IA — le logiciel fonctionne parfaitement sans modèle IA
-- Un vrai moteur ATS — analyse structurelle, pas un compteur de mots-clés
+- Pas un template picker (Canva) : l'utilisateur construit son propre système de design
+- Pas une app web déguisée : logiciel natif, léger, rapide
+- Pas un gadget IA : le logiciel fonctionne parfaitement sans modèle IA
+- Un vrai moteur ATS : analyse structurelle, pas un compteur de mots-clés
 
 ## Objectifs mesurables
 
@@ -47,4 +47,4 @@ CV Architect AI est un logiciel de bureau, gratuit et entièrement hors ligne, q
 - Pas un clone de Canva ou Novorésumé
 - Pas un SaaS ni une application cloud
 - Pas un outil dépendant d'une API payante
-- Pas un projet jetable — il doit être maintenable pendant des années
+- Pas un projet jetable : il doit être maintenable pendant des années

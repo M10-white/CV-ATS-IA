@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── Neutrals — warm stone tones ── */
+  /* ── Neutrals ── */
   --color-paper: #faf9f7;
   --color-surface: #f3f1ee;
   --color-raised: #ffffff;
@@ -11,7 +11,7 @@
   --color-border: #e7e5e4;
   --color-border-light: #f0eeec;
 
-  /* ── Accent — soft rose ── */
+  /* ── Accent ── */
   --color-accent: #be5985;
   --color-accent-dim: #fdf2f7;
   --color-accent-text: #9d174d;

@@ -208,7 +208,7 @@ export function ATSPanel() {
             animation: "alertSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) both",
           }}
         >
-          <span className="text-2xl block mb-2">🎉</span>
+          <span className="text-2xl block mb-2 font-bold" style={{ color: "var(--color-success)" }}>OK</span>
           <p className="text-sm font-semibold" style={{ color: "var(--color-success)" }}>
             Excellent ! Aucun problème détecté.
           </p>
